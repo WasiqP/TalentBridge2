@@ -1,0 +1,55 @@
+import type { PricingPlan } from "@/types";
+
+export const pricingPlans: PricingPlan[] = [
+  {
+    id: "starter",
+    name: "Starter",
+    description: "For independent recruiters & small teams getting started with AI.",
+    monthlyPrice: 49,
+    yearlyPrice: 39,
+    cta: "Start free trial",
+    features: [
+      "Up to 3 active roles",
+      "500 AI sourcing credits / mo",
+      "Resume intelligence",
+      "Personalized outreach drafts",
+      "Slack + email notifications",
+      "Community support",
+    ],
+  },
+  {
+    id: "growth",
+    name: "Growth",
+    description: "For in-house teams ready to scale hiring with full automation.",
+    monthlyPrice: 149,
+    yearlyPrice: 119,
+    cta: "Book a demo",
+    popular: true,
+    features: [
+      "Unlimited active roles",
+      "5,000 AI sourcing credits / mo",
+      "Autonomous sourcing agents",
+      "Multi-touch outreach sequences",
+      "Pipeline analytics + forecasts",
+      "ATS sync (Greenhouse, Lever, Ashby)",
+      "Priority support",
+    ],
+  },
+  {
+    id: "enterprise",
+    name: "Enterprise",
+    description: "For high-volume hiring orgs with custom compliance needs.",
+    monthlyPrice: 0,
+    yearlyPrice: 0,
+    cta: "Talk to sales",
+    features: [
+      "Unlimited everything",
+      "Custom AI models per team",
+      "SAML SSO + SCIM",
+      "SOC 2 Type II + DPA",
+      "Dedicated CSM",
+      "Custom integrations",
+      "99.99% uptime SLA",
+    ],
+  },
+];
