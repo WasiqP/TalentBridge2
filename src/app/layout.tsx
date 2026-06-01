@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Outfit, Geist_Mono, Instrument_Serif } from "next/font/google";
 
-import { AnnouncementBar } from "@/components/layout/announcement-bar";
-import { Footer } from "@/components/layout/footer";
-import { Header } from "@/components/layout/header";
+import { ConditionalAnnouncementBar } from "@/components/layout/conditional-announcement-bar";
+import { ConditionalFooter } from "@/components/layout/conditional-footer";
+import { ConditionalHeader } from "@/components/layout/conditional-header";
 import { LenisProvider } from "@/components/motion/lenis-provider";
 import { siteConfig } from "@/config/site";
 
@@ -78,10 +78,10 @@ export default function RootLayout({
     >
       <body className="min-h-screen overflow-x-clip font-sans">
         <LenisProvider>
-          <AnnouncementBar />
-          <Header />
+          <ConditionalAnnouncementBar />
+          <ConditionalHeader />
           <main>{children}</main>
-          <Footer />
+          <ConditionalFooter />
         </LenisProvider>
       </body>
     </html>
