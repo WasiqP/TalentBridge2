@@ -13,6 +13,7 @@ export const metadata: Metadata = {
 export default function SignUpPage() {
   return (
     <AuthShell
+      fullViewport
       title="Create your account"
       subtitle="Free for 14 days. Set up your first role in under 30 minutes."
     >

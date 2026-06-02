@@ -12,6 +12,7 @@ export const metadata: Metadata = {
 export default function SignInPage() {
   return (
     <AuthShell
+      fullViewport
       title="Welcome back"
       subtitle="Sign in to your recruiting copilot — pick up right where your pipeline left off."
     >

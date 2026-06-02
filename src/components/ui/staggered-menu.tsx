@@ -44,6 +44,10 @@ export interface StaggeredMenuProps {
   panelMiddle?: React.ReactNode;
   /** Insert `panelMiddle` after this nav item index (0-based). Default: 1 */
   panelMiddleAfterIndex?: number;
+  /** Content on the header row opposite the menu toggle (outside the panel). */
+  headerTrailing?: React.ReactNode;
+  /** Top row inside the panel (e.g. current role opposite Close). */
+  panelToolbar?: React.ReactNode;
 }
 
 export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
@@ -68,6 +72,8 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
   panelFooterBottom,
   panelMiddle,
   panelMiddleAfterIndex = 1,
+  headerTrailing,
+  panelToolbar,
 }: StaggeredMenuProps) => {
   const [open, setOpen] = useState(false);
   const openRef = useRef(false);
@@ -422,50 +428,58 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
         })()}
       </div>
       <header className="staggered-menu-header" aria-label="Main navigation header">
-        <div className="sm-logo" aria-label="Logo">
-          <img
-            src={logoUrl || '/src/assets/logos/reactbits-gh-white.svg'}
-            alt="Logo"
-            className="sm-logo-img"
-            draggable={false}
-            width={110}
-            height={24}
-          />
-        </div>
-        <button
-          ref={toggleBtnRef}
-          className="sm-toggle"
-          aria-label={open ? 'Close menu' : 'Open menu'}
-          aria-expanded={open}
-          aria-controls="staggered-menu-panel"
-          onClick={toggleMenu}
-          type="button"
-        >
-          <span ref={textWrapRef} className="sm-toggle-textWrap" aria-hidden="true">
-            <span ref={textInnerRef} className="sm-toggle-textInner">
-              {textLines.map((l, i) => (
-                <span className="sm-toggle-line" key={i}>
-                  {l}
-                </span>
-              ))}
+        <div className="sm-header-leading">
+          <div className="sm-logo" aria-label="Logo">
+            <img
+              src={logoUrl || '/src/assets/logos/reactbits-gh-white.svg'}
+              alt="Logo"
+              className="sm-logo-img"
+              draggable={false}
+              width={110}
+              height={24}
+            />
+          </div>
+          <button
+            ref={toggleBtnRef}
+            className="sm-toggle"
+            aria-label={open ? 'Close menu' : 'Open menu'}
+            aria-expanded={open}
+            aria-controls="staggered-menu-panel"
+            onClick={toggleMenu}
+            type="button"
+          >
+            <span ref={textWrapRef} className="sm-toggle-textWrap" aria-hidden="true">
+              <span ref={textInnerRef} className="sm-toggle-textInner">
+                {textLines.map((l, i) => (
+                  <span className="sm-toggle-line" key={i}>
+                    {l}
+                  </span>
+                ))}
+              </span>
             </span>
-          </span>
-          <span ref={iconRef} className="sm-icon" aria-hidden="true">
-            <span ref={plusHRef} className="sm-icon-line" />
-            <span ref={plusVRef} className="sm-icon-line sm-icon-line-v" />
-          </span>
-        </button>
+            <span ref={iconRef} className="sm-icon" aria-hidden="true">
+              <span ref={plusHRef} className="sm-icon-line" />
+              <span ref={plusVRef} className="sm-icon-line sm-icon-line-v" />
+            </span>
+          </button>
+        </div>
+        {headerTrailing ? (
+          <div className="sm-header-trailing">{headerTrailing}</div>
+        ) : null}
       </header>
 
       <aside id="staggered-menu-panel" ref={panelRef} className="staggered-menu-panel" aria-hidden={!open}>
         <div className="sm-panel-inner">
+          {panelToolbar ? (
+            <div className="sm-panel-toolbar">{panelToolbar}</div>
+          ) : null}
           {panelHeader ? (
             <div className="sm-panel-header">{panelHeader}</div>
           ) : null}
           <ul className="sm-panel-list" role="list" data-numbering={displayItemNumbering || undefined}>
             {items && items.length ? (
               items.map((it, idx) => (
-                <React.Fragment key={it.label + idx}>
+                <React.Fragment key={it.link}>
                   <li className="sm-panel-itemWrap">
                     <a className="sm-panel-item" href={it.link} aria-label={it.ariaLabel} data-index={idx + 1}>
                       <span className="sm-panel-itemLabel">{it.label}</span>

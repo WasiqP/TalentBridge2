@@ -11,6 +11,8 @@ type AuthShellProps = {
   className?: string;
   /** Split marketing panel (default) or single centered column */
   layout?: "split" | "centered";
+  /** Use full viewport height (no global header / announcement offset). */
+  fullViewport?: boolean;
 };
 
 const highlights = [
@@ -25,6 +27,7 @@ export function AuthShell({
   subtitle,
   className,
   layout = "split",
+  fullViewport = false,
 }: AuthShellProps) {
   if (layout === "centered") {
     return (
@@ -57,10 +60,20 @@ export function AuthShell({
   }
 
   return (
-    <section className="relative bg-paper-50 py-4 pb-8 sm:py-6 sm:pb-10 lg:min-h-[calc(100svh-5rem)]">
+    <section
+      className={cn(
+        "relative bg-paper-50",
+        fullViewport
+          ? "flex min-h-svh items-stretch py-4 sm:py-5"
+          : "py-4 pb-8 sm:py-6 sm:pb-10 lg:min-h-[calc(100svh-5rem)]",
+      )}
+    >
       <div
         className={cn(
-          "mx-auto grid min-h-[calc(100svh-6rem)] max-w-[1440px] overflow-hidden rounded-[28px] border border-ink-900/8 bg-paper-50 shadow-sm sm:min-h-[calc(100svh-7rem)] sm:rounded-[36px] lg:min-h-[calc(100svh-5.5rem)] lg:grid-cols-2",
+          "mx-auto grid w-full max-w-[1440px] overflow-hidden rounded-[28px] border border-ink-900/8 bg-paper-50 shadow-sm lg:grid-cols-2",
+          fullViewport
+            ? "min-h-[calc(100svh-2rem)] sm:min-h-[calc(100svh-2.5rem)] sm:rounded-[36px]"
+            : "min-h-[calc(100svh-6rem)] sm:min-h-[calc(100svh-7rem)] sm:rounded-[36px] lg:min-h-[calc(100svh-5.5rem)]",
           className,
         )}
       >

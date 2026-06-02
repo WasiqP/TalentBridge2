@@ -18,7 +18,11 @@ function isAllowedResume(file: File) {
   return file.size <= MAX_BYTES;
 }
 
-export function DashboardResumeDropzone() {
+type DashboardResumeDropzoneProps = {
+  onFileSelected?: (file: File) => void;
+};
+
+export function DashboardResumeDropzone({ onFileSelected }: DashboardResumeDropzoneProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragActive, setDragActive] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -38,6 +42,7 @@ export function DashboardResumeDropzone() {
     setError(null);
     setSelectedFile(file);
     console.log("[resume-upload]", { name: file.name, size: file.size, type: file.type });
+    onFileSelected?.(file);
   }
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {

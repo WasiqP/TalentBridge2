@@ -20,6 +20,20 @@ export type UserRoleOption = {
   icon: LucideIcon;
 };
 
+export function isUserRole(value: string | null): value is UserRole {
+  return value === "job-seeker" || value === "recruiter";
+}
+
+export function getRoleDisplayTitle(role: UserRole): string {
+  return userRoleOptions.find((o) => o.id === role)?.title ?? role;
+}
+
+export function readStoredUserRole(): UserRole | null {
+  if (typeof window === "undefined") return null;
+  const stored = sessionStorage.getItem(USER_ROLE_STORAGE_KEY);
+  return isUserRole(stored) ? stored : null;
+}
+
 export const userRoleOptions: UserRoleOption[] = [
   {
     id: "job-seeker",

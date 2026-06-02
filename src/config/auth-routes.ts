@@ -13,8 +13,12 @@ export function isAuthRoute(pathname: string) {
   );
 }
 
-/** Routes with no site header (focused onboarding chrome). */
-export const routesWithoutNav = ["/select-role"] as const;
+/** Routes with no site header or announcement bar (focused auth chrome). */
+export const routesWithoutNav = [
+  "/select-role",
+  "/sign-in",
+  "/sign-up",
+] as const;
 
 export function isRouteWithoutNav(pathname: string) {
   return routesWithoutNav.some(
