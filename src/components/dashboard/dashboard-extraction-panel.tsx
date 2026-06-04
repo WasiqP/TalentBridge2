@@ -18,6 +18,10 @@ type DashboardExtractionPanelProps = {
   className?: string;
   /** Centered full-page card shown right after upload. */
   variant?: "panel" | "standalone";
+  eyebrow?: string;
+  heading?: string;
+  fileHint?: string;
+  ariaLabel?: string;
 };
 
 export function DashboardExtractionPanel({
@@ -25,6 +29,10 @@ export function DashboardExtractionPanel({
   steps,
   className,
   variant = "panel",
+  eyebrow = "Resume extraction",
+  heading = "Building your profile in real time",
+  fileHint = "Parsing sections and generating structured data",
+  ariaLabel = "Resume extraction progress",
 }: DashboardExtractionPanelProps) {
   const isStandalone = variant === "standalone";
 
@@ -37,16 +45,14 @@ export function DashboardExtractionPanel({
           : "h-full min-h-[min(440px,54vh)]",
         className,
       )}
-      aria-label="Resume extraction progress"
+      aria-label={ariaLabel}
     >
       <div className="flex items-start justify-between border-b border-ink-900/8 px-5 py-4">
         <div>
           <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink-400">
-            Resume extraction
+            {eyebrow}
           </p>
-          <p className="mt-1 text-[14px] font-medium text-ink-950">
-            Building your profile in real time
-          </p>
+          <p className="mt-1 text-[14px] font-medium text-ink-950">{heading}</p>
         </div>
         <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-ink-900/10 bg-paper-100">
           <Sparkles className="h-5 w-5 text-ink-800" aria-hidden />
@@ -67,9 +73,7 @@ export function DashboardExtractionPanel({
               <p className="truncate text-[14px] font-semibold text-ink-950">
                 {fileName ?? "Resume"}
               </p>
-              <p className="text-[12px] leading-relaxed text-ink-500">
-                Parsing sections and generating structured data
-              </p>
+              <p className="text-[12px] leading-relaxed text-ink-500">{fileHint}</p>
             </div>
             <Loader2
               className="ml-auto h-4 w-4 shrink-0 animate-spin text-ink-500"

@@ -1,13 +1,17 @@
 import type { LucideIcon } from "lucide-react";
 import { Briefcase, UserRound } from "lucide-react";
 
-import { JOB_SEEKER_DASHBOARD_PATH } from "@/config/dashboard-routes";
+import {
+  HIRING_AGENCY_DASHBOARD_PATH,
+  JOB_SEEKER_DASHBOARD_PATH,
+} from "@/config/dashboard-routes";
 import type { UserRole } from "@/types/user-role";
 
 export const SELECT_ROLE_PATH = "/select-role" as const;
 
 export function getDashboardPathForRole(role: UserRole): string {
   if (role === "job-seeker") return JOB_SEEKER_DASHBOARD_PATH;
+  if (role === "recruiter") return HIRING_AGENCY_DASHBOARD_PATH;
   return "/";
 }
 

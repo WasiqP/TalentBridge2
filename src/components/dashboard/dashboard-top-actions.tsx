@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 import { FileUp, Settings, UserRound } from "lucide-react";
 
 import {
+  HIRING_AGENCY_NEW_ROLE_PATH,
+  isHiringAgencyRoute,
   JOB_SEEKER_DASHBOARD_PATH,
   JOB_SEEKER_PROFILE_PATH,
   JOB_SEEKER_SEARCH_PATH,
@@ -25,6 +27,7 @@ type DashboardTopActionsProps = {
 
 export function DashboardTopActions({ className }: DashboardTopActionsProps) {
   const pathname = usePathname();
+  const onRecruiter = isHiringAgencyRoute(pathname);
   const onSearch = pathname === JOB_SEEKER_SEARCH_PATH;
   const onProfile = pathname === JOB_SEEKER_PROFILE_PATH;
   const onSettings = pathname === JOB_SEEKER_SETTINGS_PATH;
@@ -37,7 +40,16 @@ export function DashboardTopActions({ className }: DashboardTopActionsProps) {
       )}
     >
       <div className="pointer-events-auto flex items-center gap-2">
-        {onSearch ? (
+        {onRecruiter ? (
+          <>
+            <Link href={HIRING_AGENCY_NEW_ROLE_PATH} className={textButtonClass}>
+              Post a role
+            </Link>
+            <Link href={SELECT_ROLE_PATH} className={textButtonClass}>
+              Change your role
+            </Link>
+          </>
+        ) : onSearch ? (
           <Link
             href={JOB_SEEKER_DASHBOARD_PATH}
             className={cn(textButtonClass, "gap-2")}
@@ -50,28 +62,34 @@ export function DashboardTopActions({ className }: DashboardTopActionsProps) {
             Change your role
           </Link>
         )}
-        <Link
-          href={JOB_SEEKER_PROFILE_PATH}
-          className={cn(
-            iconButtonClass,
-            onProfile && "border-ink-900/25 bg-paper-100 ring-2 ring-accent-lime/25",
-          )}
-          aria-label="Profile"
-          aria-current={onProfile ? "page" : undefined}
-        >
-          <UserRound className="h-5 w-5" strokeWidth={2} />
-        </Link>
-        <Link
-          href={JOB_SEEKER_SETTINGS_PATH}
-          className={cn(
-            iconButtonClass,
-            onSettings && "border-ink-900/25 bg-paper-100 ring-2 ring-accent-lime/25",
-          )}
-          aria-label="Settings"
-          aria-current={onSettings ? "page" : undefined}
-        >
-          <Settings className="h-5 w-5" strokeWidth={2} />
-        </Link>
+        {!onRecruiter ? (
+          <>
+            <Link
+              href={JOB_SEEKER_PROFILE_PATH}
+              className={cn(
+                iconButtonClass,
+                onProfile &&
+                  "border-ink-900/25 bg-paper-100 ring-2 ring-accent-lime/25",
+              )}
+              aria-label="Profile"
+              aria-current={onProfile ? "page" : undefined}
+            >
+              <UserRound className="h-5 w-5" strokeWidth={2} />
+            </Link>
+            <Link
+              href={JOB_SEEKER_SETTINGS_PATH}
+              className={cn(
+                iconButtonClass,
+                onSettings &&
+                  "border-ink-900/25 bg-paper-100 ring-2 ring-accent-lime/25",
+              )}
+              aria-label="Settings"
+              aria-current={onSettings ? "page" : undefined}
+            >
+              <Settings className="h-5 w-5" strokeWidth={2} />
+            </Link>
+          </>
+        ) : null}
       </div>
     </header>
   );

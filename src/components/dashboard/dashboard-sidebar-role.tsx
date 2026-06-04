@@ -9,10 +9,14 @@ import { cn } from "@/lib/utils";
 
 type DashboardSidebarRoleProps = {
   className?: string;
+  fallback?: "job-seeker" | "recruiter";
 };
 
-export function DashboardSidebarRole({ className }: DashboardSidebarRoleProps) {
-  const { label } = useStoredUserRole({ fallback: "job-seeker" });
+export function DashboardSidebarRole({
+  className,
+  fallback = "job-seeker",
+}: DashboardSidebarRoleProps) {
+  const { label } = useStoredUserRole({ fallback });
 
   return (
     <Link
