@@ -1,6 +1,14 @@
 # TalentBridge
 
-Next.js foundation for an AI SaaS marketing platform, inspired by modern landing-page patterns.
+Next.js application for TalentBridge — marketing site, authentication, and job seeker dashboard.
+
+## Documentation
+
+| Audience | Guide |
+|----------|--------|
+| **Clients & stakeholders** (brand, colors, UI) | [docs/BRAND-GUIDE.md](docs/BRAND-GUIDE.md) |
+| **Developers** (routes, APIs, file paths) | [DOCUMENTATION.md](DOCUMENTATION.md) |
+| **Doc index** | [docs/README.md](docs/README.md) |
 
 ## Tech stack
 
@@ -39,8 +47,10 @@ src/
 │   ├── layout.tsx          # Root layout
 │   └── page.tsx            # Home page
 ├── components/
-│   ├── forms/              # Contact, newsletter forms
-│   ├── layout/             # Header, footer
+│   ├── auth/               # Sign-in/sign-up shell and fields
+│   ├── dashboard/          # Job seeker app UI
+│   ├── forms/              # Contact, auth, newsletter forms
+│   ├── layout/             # Header, footer, conditional chrome
 │   ├── sections/           # Page sections (hero, pricing, etc.)
 │   └── ui/                 # Reusable UI primitives
 ├── config/                 # Site & navigation config
@@ -52,15 +62,11 @@ src/
 
 ## Pages
 
-- `/` — Home
-- `/about` — About
-- `/features` — Features
-- `/pricing` — Pricing
-- `/blog` — Blog listing
-- `/blog/[slug]` — Blog post
-- `/contact` — Contact form
-- `/privacy` — Privacy policy
-- `/terms` — Terms of service
+**Marketing:** `/`, `/features`, `/pricing`, `/about`, `/blog`, `/contact`, `/customers`, `/changelog`, `/privacy`, `/terms`, `/solutions/[role]`
+
+**Auth:** `/sign-in`, `/sign-up`, `/verify`, `/forgot-password`, `/select-role`
+
+**Dashboard:** `/dashboard/job-seeker`, `/dashboard/job-seeker/search`, `/dashboard/job-seeker/my-resumes`, `/dashboard/job-seeker/profile`, `/dashboard/job-seeker/settings`
 
 ## Environment
 

@@ -51,7 +51,7 @@ export function DashboardSidebarFooter() {
         ))}
       </nav>
 
-      <p className="text-[11px] leading-snug text-ink-400">
+      <p className="text-[11px] leading-snug text-ink-400" suppressHydrationWarning>
         © {year} {siteConfig.name}
       </p>
     </div>

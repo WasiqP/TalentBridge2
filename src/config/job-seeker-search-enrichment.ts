@@ -8,6 +8,8 @@ export type JobSeekerSearchResultCore = {
   id: string;
   jobTitle: string;
   companyName: string;
+  /** Optional logo URL — when omitted, UI shows initials placeholder. */
+  companyLogoUrl?: string;
   companyMeta: string;
   salaryRange: string;
   location: string;

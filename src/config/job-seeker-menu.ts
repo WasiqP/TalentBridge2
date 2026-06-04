@@ -11,8 +11,8 @@ import {
 /** Placeholder nav — routes and labels will be refined with layout design. */
 export const jobSeekerMenuItems: StaggeredMenuItem[] = [
   {
-    label: "Dashboard",
-    ariaLabel: "Go to dashboard",
+    label: "Home",
+    ariaLabel: "Go to home",
     link: JOB_SEEKER_DASHBOARD_PATH,
   },
   {

@@ -20,8 +20,14 @@ import {
   DashboardExtractionPanel,
   type ExtractionStep,
 } from "@/components/dashboard/dashboard-extraction-panel";
-import { DashboardPdfViewer } from "@/components/dashboard/dashboard-pdf-viewer";
+import {
+  DashboardHiddenResumeInput,
+  type DashboardHiddenResumeInputHandle,
+} from "@/components/dashboard/dashboard-hidden-resume-input";
+import { DashboardMatchedJobsPanel } from "@/components/dashboard/dashboard-matched-jobs-panel";
+import { DashboardResumePreviewModal } from "@/components/dashboard/dashboard-resume-preview-modal";
 import { DashboardResumeDropzone } from "@/components/dashboard/dashboard-resume-dropzone";
+import { jobSeekerSearchResults } from "@/config/job-seeker-search";
 import { DashboardTopActions } from "@/components/dashboard/dashboard-top-actions";
 import { StaggeredMenu } from "@/components/ui/staggered-menu";
 import { jobSeekerMenuItems } from "@/config/job-seeker-menu";
@@ -34,6 +40,9 @@ type JobSeekerDashboardShellProps = {
 };
 
 const EXTRACTION_TO_SPLIT_MS = 5000;
+
+const RESUME_UPLOAD_ACCEPT =
+  ".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 
 const initialSteps: ExtractionStep[] = [
   { id: "s1", title: "Reading your resume", status: "pending" },
@@ -53,9 +62,17 @@ export function JobSeekerDashboardShell({
   const [resumeFileUrl, setResumeFileUrl] = useState<string | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [steps, setSteps] = useState<ExtractionStep[]>(initialSteps);
+  const [resumePreviewOpen, setResumePreviewOpen] = useState(false);
   const resumeFileUrlRef = useRef<string | null>(null);
+  const uploadInputRef = useRef<DashboardHiddenResumeInputHandle>(null);
+
+  const matchCount = jobSeekerSearchResults.length;
 
   const fileName = useMemo(() => resumeFile?.name, [resumeFile]);
+
+  function handleUploadNewClick() {
+    uploadInputRef.current?.open();
+  }
 
   function handleFileSelected(file: File) {
     if (resumeFileUrlRef.current) {
@@ -184,6 +201,14 @@ export function JobSeekerDashboardShell({
 
     timers.push(
       setTimeout(() => {
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: "m5",
+            role: "assistant",
+            content: `I found ${matchCount} roles that match your resume. Your top matches are on the left — tell me your target title and location if you want me to refine them.`,
+          },
+        ]);
         setPhase("split");
       }, EXTRACTION_TO_SPLIT_MS),
     );
@@ -191,7 +216,7 @@ export function JobSeekerDashboardShell({
     return () => {
       timers.forEach(clearTimeout);
     };
-  }, [phase, resumeFile]);
+  }, [phase, resumeFile, matchCount]);
 
   function handleSend(message: string) {
     setMessages((prev) => [
@@ -285,19 +310,35 @@ export function JobSeekerDashboardShell({
             ) : (
               <motion.div
                 key="split"
-                className="mx-auto flex h-full min-h-0 w-full max-w-[90rem] flex-col overflow-hidden px-3 pt-[5.5rem] sm:px-5 lg:px-8 lg:pt-24"
+                className="mx-auto flex h-full min-h-0 w-full max-w-[96rem] flex-col overflow-hidden px-2 pt-[4.5rem] pb-5 sm:px-3 sm:pt-[5rem] sm:pb-6 lg:px-5 lg:pt-[5.5rem] lg:pb-7"
                 initial={{ opacity: 0, y: 10, filter: "blur(6px)" }}
                 animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                 exit={{ opacity: 0, y: -8, filter: "blur(6px)" }}
                 transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
               >
-                <div className="grid min-h-0 flex-1 grid-cols-1 grid-rows-[minmax(0,1fr)_minmax(0,1fr)] gap-5 overflow-hidden lg:grid-cols-2 lg:grid-rows-1 lg:gap-6 xl:gap-8">
+                <div className="grid min-h-0 max-h-[calc(100svh-7.25rem)] flex-1 grid-cols-1 grid-rows-[minmax(0,1.15fr)_minmax(0,0.85fr)] gap-4 overflow-hidden sm:max-h-[calc(100svh-7.75rem)] sm:gap-5 lg:max-h-[calc(100svh-8.25rem)] lg:grid-cols-[minmax(0,1fr)_minmax(300px,34%)] lg:grid-rows-1 lg:gap-5 xl:gap-6">
                   <motion.div
                     className="flex h-full min-h-0 min-w-0 flex-col overflow-hidden"
                     initial={{ opacity: 0, x: -14 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{
-                      delay: 0.08,
+                      delay: 0.05,
+                      duration: 0.45,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                  >
+                    <DashboardMatchedJobsPanel
+                      className="h-full min-h-0"
+                      resumeFileName={fileName}
+                      totalMatchCount={matchCount}
+                    />
+                  </motion.div>
+                  <motion.div
+                    className="flex h-full min-h-0 min-w-0 flex-col overflow-hidden"
+                    initial={{ opacity: 0, x: 14 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{
+                      delay: 0.12,
                       duration: 0.45,
                       ease: [0.22, 1, 0.36, 1],
                     }}
@@ -306,16 +347,22 @@ export function JobSeekerDashboardShell({
                       className="h-full min-h-0"
                       messages={messages}
                       onSend={handleSend}
+                      onUploadNew={handleUploadNewClick}
+                      eyebrow="Copilot"
+                      title="Refine your matches"
+                      headerAction={
+                        resumeFileUrl ? (
+                          <button
+                            type="button"
+                            onClick={() => setResumePreviewOpen(true)}
+                            className="rounded-full border border-ink-900/12 bg-paper-100 px-3 py-1.5 text-[12px] font-medium text-ink-800 transition hover:border-ink-900/22 hover:bg-paper-200 sm:text-[13px]"
+                          >
+                            View resume
+                          </button>
+                        ) : null
+                      }
                     />
                   </motion.div>
-                  <div className="flex h-full min-h-0 min-w-0 flex-col overflow-hidden">
-                    <DashboardPdfViewer
-                      className="h-full min-h-0"
-                      fileName={fileName}
-                      fileUrl={resumeFileUrl}
-                      mimeType={resumeFile?.type}
-                    />
-                  </div>
                 </div>
               </motion.div>
             )}
@@ -324,6 +371,20 @@ export function JobSeekerDashboardShell({
       </main>
 
       {showBottomChat ? <DashboardChatInput /> : null}
+
+      <DashboardHiddenResumeInput
+        ref={uploadInputRef}
+        accept={RESUME_UPLOAD_ACCEPT}
+        onFileSelected={handleFileSelected}
+      />
+
+      <DashboardResumePreviewModal
+        open={resumePreviewOpen}
+        onClose={() => setResumePreviewOpen(false)}
+        fileName={fileName}
+        fileUrl={resumeFileUrl}
+        mimeType={resumeFile?.type}
+      />
 
       <style jsx global>{`
         .job-seeker-staggered-menu .staggered-menu-header {

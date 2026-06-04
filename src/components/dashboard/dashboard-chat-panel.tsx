@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, type ReactNode } from "react";
 import { Bot, UserRound } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 
@@ -17,13 +17,21 @@ export type ChatMessage = {
 type DashboardChatPanelProps = {
   messages: ChatMessage[];
   onSend: (message: string) => void;
+  onUploadNew?: () => void;
   className?: string;
+  eyebrow?: string;
+  title?: string;
+  headerAction?: ReactNode;
 };
 
 export function DashboardChatPanel({
   messages,
   onSend,
+  onUploadNew,
   className,
+  eyebrow = "Chat",
+  title = "Resume onboarding",
+  headerAction,
 }: DashboardChatPanelProps) {
   const endRef = useRef<HTMLDivElement | null>(null);
 
@@ -41,15 +49,16 @@ export function DashboardChatPanel({
       )}
       aria-label="Chat"
     >
-      <div className="flex items-center justify-between border-b border-ink-900/8 px-5 py-4">
-        <div>
+      <div className="flex items-start justify-between gap-3 border-b border-ink-900/8 px-5 py-4">
+        <div className="min-w-0">
           <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink-400">
-            Chat
+            {eyebrow}
           </p>
-          <p className="mt-1 text-[14px] font-medium text-ink-950">
-            Resume onboarding
-          </p>
+          <p className="mt-1 text-[14px] font-medium text-ink-950">{title}</p>
         </div>
+        {headerAction ? (
+          <div className="shrink-0">{headerAction}</div>
+        ) : null}
       </div>
 
       <div
@@ -108,13 +117,22 @@ export function DashboardChatPanel({
         <div ref={endRef} />
       </div>
 
-      <div className="border-t border-ink-900/8 px-4 py-4 sm:px-5">
+      <div className="space-y-3 border-t border-ink-900/8 px-4 py-4 sm:px-5">
         <DashboardChatInput
           variant="inline"
           onSend={onSend}
           placeholder="Message the copilot…"
           showDisclaimer={false}
         />
+        {onUploadNew ? (
+          <button
+            type="button"
+            onClick={onUploadNew}
+            className="flex h-11 w-full items-center justify-center rounded-full bg-ink-950 text-[14px] font-medium text-paper-50 transition hover:bg-ink-800 sm:text-[15px]"
+          >
+            Upload New
+          </button>
+        ) : null}
       </div>
     </section>
   );

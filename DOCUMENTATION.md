@@ -1,6 +1,8 @@
 # TalentBridge — Complete Project Documentation
 
-This document explains **everything** built in the TalentBridge marketing website so far. It is written for someone who has **never seen the codebase** — no prior context required.
+This document explains **everything** built in the TalentBridge application so far. It is written for developers and technical teammates who need routes, file paths, and APIs.
+
+**For clients and non-technical reviewers:** use the plain-language **[Brand & Design Guide](docs/BRAND-GUIDE.md)** (colors, typography, components, UX). Index: [docs/README.md](docs/README.md).
 
 ---
 
@@ -30,7 +32,7 @@ This document explains **everything** built in the TalentBridge marketing websit
 
 ## 1. What is this project?
 
-**TalentBridge** is a **marketing-only website** for a fictional (or planned) SaaS product: an **AI recruiting copilot** for recruiters and hiring teams.
+**TalentBridge** is a **Next.js web application** for an **AI recruiting copilot** — public marketing, account flows, and a **job seeker dashboard** (in progress).
 
 ### Product pitch (what the site sells)
 
@@ -44,17 +46,16 @@ TalentBridge helps recruiting teams:
 
 **Tagline:** *"Hire 10x faster. With ten times the signal."*
 
-### What the website does
+### What the application includes today
 
-It is a **public-facing marketing site** — like the homepage of Linear, Vercel, or a modern Webflow SaaS template. Visitors can:
+| Surface | Purpose |
+|---------|---------|
+| **Marketing site** | Home, features, pricing, blog, contact, legal, solutions — public SEO pages |
+| **Authentication** | Sign-in, sign-up, verify email, forgot password, select role |
+| **Job seeker dashboard** | Resume upload, AI chat flow, job search, my resumes, profile, settings |
+| **API routes** | Contact, health, auth handlers (session/cookie-based; no external DB in repo) |
 
-- Learn about features and pricing
-- Read blog posts and changelog updates
-- View customer stories and role-specific solutions
-- Request a demo via a contact form
-- Read privacy and terms pages
-
-There is **no login**, **no dashboard**, and **no real backend database** in this version.
+**Brand and UI standards:** [docs/BRAND-GUIDE.md](docs/BRAND-GUIDE.md)
 
 ---
 
@@ -62,12 +63,13 @@ There is **no login**, **no dashboard**, and **no real backend database** in thi
 
 | Out of scope | Notes |
 |--------------|--------|
-| User authentication | No sign-up, sign-in, or protected routes |
-| Admin panel / CMS | All blog, FAQ, pricing, etc. live in TypeScript files under `src/constants/` |
-| Real ATS integrations | Integration names are display-only |
-| Real email sending | Contact form logs to server console and returns success |
+| Production CMS | Blog, FAQ, pricing, etc. live in TypeScript files under `src/constants/` |
+| Hiring agency dashboard (full) | Route placeholder exists; job seeker dashboard is the main app UI |
+| Real ATS integrations | Integration names are display-only on marketing pages |
+| Production email | Contact form logs to server console; wire SendGrid/Resend for production |
 | Paid GSAP plugins | Text animations use a custom `TextReveal` component instead of SplitText |
-| Database | No PostgreSQL, MongoDB, etc. |
+| External database | No PostgreSQL/MongoDB in repo; auth APIs are in-memory/session style for dev |
+| Social OAuth (live) | Google/Microsoft/LinkedIn buttons are UI-only (“Coming soon”) |
 
 ---
 
@@ -136,6 +138,8 @@ Example: `import { siteConfig } from "@/config/site"`
 
 Defined primarily in `src/app/globals.css` using Tailwind v4 `@theme` tokens.
 
+**Client-facing detail (colors, buttons, sections, auth, dashboard):** [docs/BRAND-GUIDE.md](docs/BRAND-GUIDE.md)
+
 ### Color tokens
 
 | Token | Example use |
@@ -191,12 +195,14 @@ TalentBridge2/
 │   │   ├── error.tsx          # Global error UI
 │   │   └── not-found.tsx      # 404 page
 │   ├── components/
-│   │   ├── forms/             # Contact, newsletter
-│   │   ├── layout/            # Header, footer, announcement bar
+│   │   ├── auth/              # Auth shell, fields, OTP, social row
+│   │   ├── dashboard/         # Job seeker shell, search, resumes, settings
+│   │   ├── forms/             # Contact, newsletter, sign-in/up, verify, etc.
+│   │   ├── layout/            # Header, footer, conditional chrome
 │   │   ├── motion/            # Animation primitives
 │   │   ├── sections/          # Large page sections
-│   │   └── ui/                # Buttons, cards, container, etc.
-│   ├── config/                # site.ts, navigation.ts
+│   │   └── ui/                # Buttons, cards, container, menu, etc.
+│   ├── config/                # site, navigation, auth/dashboard routes, menus
 │   ├── constants/             # All marketing copy & data
 │   ├── hooks/                 # React hooks
 │   ├── lib/                   # utils, gsap helper, formatters
@@ -207,6 +213,9 @@ TalentBridge2/
 ├── tsconfig.json
 ├── postcss.config.mjs
 ├── eslint.config.mjs
+├── docs/
+│   ├── README.md              # Doc index (clients vs developers)
+│   └── BRAND-GUIDE.md         # Non-technical brand & UI guide
 ├── README.md
 └── DOCUMENTATION.md           # This file
 ```
@@ -226,15 +235,17 @@ Every page is wrapped in this structure:
 ```
 <html>
   <body>
-    <LenisProvider>           ← smooth scrolling
-      <AnnouncementBar />     ← thin top banner
-      <Header />              ← sticky navigation
-      <main>{children}</main> ← page content
-      <Footer />              ← multi-column footer + newsletter
+    <LenisProvider>                    ← smooth scrolling
+      <ConditionalAnnouncementBar />   ← hidden on some auth/dashboard routes
+      <ConditionalHeader />          ← hidden on sign-in, sign-up, dashboard
+      <main>{children}</main>
+      <ConditionalFooter />            ← hidden on minimal auth chrome
     </LenisProvider>
   </body>
 </html>
 ```
+
+**Route-aware chrome:** `src/config/auth-routes.ts` and `src/config/dashboard-routes.ts` drive `conditional-header.tsx`, `conditional-footer.tsx`, and `conditional-announcement-bar.tsx`.
 
 ### Announcement bar
 
@@ -248,7 +259,7 @@ Every page is wrapped in this structure:
 - Sticky; becomes slightly frosted/blurred on scroll
 - Logo links to `/`
 - Desktop nav: Features, Solutions, Customers, Pricing, Changelog, Blog
-- CTAs: "Sign in" → `/contact`, "Book a demo" → `/contact` (lime button)
+- CTAs: "Sign in" → `/sign-in`, "Sign up" → `/sign-up`, "Book a demo" → `/contact` (lime)
 - Mobile: hamburger menu with same links
 
 ### Footer
@@ -283,6 +294,17 @@ Every page is wrapped in this structure:
 | `/terms` | `src/app/(marketing)/terms/page.tsx` | Static | Terms of service |
 | `/api/health` | `src/app/api/health/route.ts` | API | Health check JSON |
 | `/api/contact` | `src/app/api/contact/route.ts` | API | Form submission handler |
+| `/sign-in` | `src/app/(auth)/sign-in/page.tsx` | Static | Sign in (`AuthShell` + `SignInForm`) |
+| `/sign-up` | `src/app/(auth)/sign-up/page.tsx` | Static | Create account |
+| `/forgot-password` | `src/app/(auth)/forgot-password/page.tsx` | Static | Password reset request |
+| `/verify` | `src/app/(auth)/verify/page.tsx` | Static | Email verification code |
+| `/select-role` | `src/app/(auth)/select-role/page.tsx` | Static | Post-auth role selection |
+| `/dashboard/job-seeker` | `src/app/dashboard/job-seeker/page.tsx` | Client | Main dashboard / resume upload |
+| `/dashboard/job-seeker/search` | `src/app/dashboard/job-seeker/search/page.tsx` | Client | Job search |
+| `/dashboard/job-seeker/search/[jobId]` | `src/app/dashboard/job-seeker/search/[jobId]/page.tsx` | Client | Job detail |
+| `/dashboard/job-seeker/my-resumes` | `src/app/dashboard/job-seeker/my-resumes/page.tsx` | Client | Resume list/editor |
+| `/dashboard/job-seeker/profile` | `src/app/dashboard/job-seeker/profile/page.tsx` | Client | Profile |
+| `/dashboard/job-seeker/settings` | `src/app/dashboard/job-seeker/settings/page.tsx` | Client | Settings |
 | `/sitemap.xml` | `src/app/sitemap.ts` | Generated | SEO sitemap |
 | `/robots.txt` | `src/app/robots.ts` | Generated | Crawler rules |
 | `/opengraph-image` | `src/app/opengraph-image.tsx` | Dynamic OG | Social preview image |
@@ -295,7 +317,7 @@ Every page is wrapped in this structure:
 | Error | `src/app/error.tsx` | Runtime error recovery |
 | Loading | `src/app/loading.tsx` | Spinner while page loads |
 
-**Total:** ~25 routes in production build.
+**Total:** ~35+ routes in production build (marketing + auth + dashboard + API).
 
 ---
 
@@ -563,6 +585,18 @@ Feature IDs for anchors: `sourcing`, `ranking`, `outreach`, `screening`, `insigh
 
 > **Note:** No email service (SendGrid, Resend, etc.) is wired yet. Integrate here for production.
 
+### Auth API (`src/app/api/auth/`)
+
+| Method | Path | File | Purpose |
+|--------|------|------|---------|
+| POST | `/api/auth/sign-in` | `sign-in/route.ts` | Email/password sign-in; may return `requiresVerification` |
+| POST | `/api/auth/sign-up` | `sign-up/route.ts` | Create account |
+| POST | `/api/auth/verify` | `verify/route.ts` | Submit email verification code |
+| POST | `/api/auth/forgot-password` | `forgot-password/route.ts` | Request password reset |
+| POST | `/api/auth/select-role` | `select-role/route.ts` | Persist user role after login |
+
+Forms: `src/components/forms/sign-in-form.tsx`, `sign-up-form.tsx`, `verify-code-form.tsx`, `forgot-password-form.tsx`, `select-role-form.tsx`.
+
 ---
 
 ## 12. SEO and metadata
@@ -609,6 +643,10 @@ All marketing copy is **editable in code** — no CMS.
 |------|----------|
 | `src/config/site.ts` | Brand name, tagline, description, URL, contact emails, social links |
 | `src/config/navigation.ts` | Header nav, footer nav, solutions sub-nav |
+| `src/config/auth-routes.ts` | Auth paths, minimal chrome rules |
+| `src/config/dashboard-routes.ts` | Job seeker dashboard paths |
+| `src/config/job-seeker-menu.ts` | Dashboard sidebar menu items |
+| `src/config/user-roles.ts` | Role constants and select-role path |
 | `src/constants/features.ts` | 6 product features for bento + features page |
 | `src/constants/pricing.ts` | 3 pricing plans |
 | `src/constants/faq.ts` | 6 FAQ items |
@@ -640,8 +678,11 @@ All marketing copy is **editable in code** — no CMS.
 | Component | Description |
 |-----------|-------------|
 | `announcement-bar.tsx` | Top promo strip |
+| `conditional-announcement-bar.tsx` | Hides bar on auth/dashboard per route |
 | `header.tsx` | Sticky nav + mobile menu |
+| `conditional-header.tsx` | Hides header on sign-in, sign-up, dashboard |
 | `footer.tsx` | Multi-column footer + newsletter |
+| `conditional-footer.tsx` | Hides footer on minimal auth routes |
 
 ### Sections (`src/components/sections/`)
 
@@ -674,6 +715,34 @@ All marketing copy is **editable in code** — no CMS.
 | `input.tsx` | Styled text input |
 | `logo.tsx` | Brand mark + wordmark |
 | `spotlight-card.tsx` | Mouse-following gradient spotlight on hover |
+| `staggered-menu.tsx` | Animated sidebar menu (dashboard) |
+
+### Auth (`src/components/auth/`)
+
+| Component | Description |
+|-----------|-------------|
+| `auth-shell.tsx` | Split marketing + form layout; centered variant; `BackToHomeLink` |
+| `auth-field.tsx` | Labeled auth input with error/hint |
+| `auth-divider.tsx` | "Or continue with" + `SocialAuthButtons` |
+| `otp-input.tsx` | Verification code digit inputs |
+
+### Dashboard (`src/components/dashboard/`)
+
+| Component | Description |
+|-----------|-------------|
+| `job-seeker-dashboard-shell.tsx` | Sidebar, phases (upload/extract/chat), route layout |
+| `dashboard-page-frame.tsx` | Centered page wrapper with fade-in |
+| `dashboard-content-panel.tsx` | Main content area |
+| `dashboard-resume-dropzone.tsx` | CV upload zone |
+| `dashboard-extraction-panel.tsx` | Parsing progress UI |
+| `dashboard-chat-panel.tsx` / `dashboard-chat-input.tsx` | AI assistant UI |
+| `dashboard-pdf-viewer.tsx` / `dashboard-pdf-canvas-pages.tsx` | Resume preview |
+| `dashboard-sidebar-*.tsx` | Search shortcut, role, logout, footer |
+| `dashboard-top-actions.tsx` | Sub-page header actions |
+| `search/*` | Search bar, filters, result cards, pagination, job sheet |
+| `resumes/*` | List items, editor |
+| `settings/*` | Sections, toggles, select fields |
+| `job-seeker-*-page.tsx` | Composed pages (search, settings, my resumes) |
 
 ### Forms (`src/components/forms/`)
 
@@ -681,6 +750,11 @@ All marketing copy is **editable in code** — no CMS.
 |-----------|----------|
 | `contact-form.tsx` | Demo request; POST to API; loading/success/error states |
 | `newsletter-form.tsx` | Email capture in footer; client-side "Joined" feedback (no API) |
+| `sign-in-form.tsx` | POST `/api/auth/sign-in` → verify or select-role |
+| `sign-up-form.tsx` | POST `/api/auth/sign-up` |
+| `verify-code-form.tsx` | POST `/api/auth/verify` |
+| `forgot-password-form.tsx` | POST `/api/auth/forgot-password` |
+| `select-role-form.tsx` | POST `/api/auth/select-role` |
 
 ### Motion (`src/components/motion/`)
 
@@ -729,6 +803,10 @@ All marketing copy is **editable in code** — no CMS.
 | Book a demo | Header, hero, CTAs | Navigates to `/contact` |
 | Contact form submit | `/contact` | POST `/api/contact`, success message |
 | Newsletter | Footer | Local state only (no backend) |
+| Sign in / Sign up | `/sign-in`, `/sign-up` | POST auth APIs; redirect to verify or select-role |
+| Select role | `/select-role` | POST `/api/auth/select-role` |
+| Job search | Dashboard search | Filters, pagination, job detail sheet |
+| Resume upload | Dashboard home | Dropzone → extraction → chat flow |
 | Pricing toggle | Home + pricing | Switches monthly/yearly prices |
 | FAQ accordion | Home, features, pricing | Expands one question |
 | Product tabs | Home showcase | Switches Sourcing/Screening/Outreach/Analytics |
@@ -771,6 +849,10 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 | Contact form fields | `src/components/forms/contact-form.tsx` + `api/contact/route.ts` |
 | CV gallery candidates | `src/constants/cv-profiles.ts` |
 | Resume marquee cards | `src/constants/resume-cards.ts` |
+| Auth marketing copy (checklist, quote) | `src/components/auth/auth-shell.tsx` |
+| Dashboard sidebar labels | `src/config/job-seeker-menu.ts` |
+| Job seeker settings copy | `src/config/job-seeker-settings.ts` |
+| Brand guide for clients | `docs/BRAND-GUIDE.md` |
 
 ### Add a new marketing page
 
@@ -786,7 +868,7 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 
 After `npm run build`, expect approximately:
 
-- **25 routes** (static + SSG + API + OG image)
+- **35+ routes** (marketing + auth + dashboard + API + OG image)
 - **~102 kB** shared JavaScript (first load)
 - Home page ~230 kB first load (due to animations and client sections)
 
@@ -810,8 +892,16 @@ Landing (/)
 
 Alternative paths:
   Header → Features / Pricing / Customers / Blog / Changelog
+  Header → Sign in / Sign up
   Solutions → Role-specific page → Contact
   Footer → Legal, About, Newsletter
+
+Auth:
+  Sign up → Verify (if required) → Select role → Dashboard
+
+Dashboard (job seeker):
+  Upload resume → Extraction → Chat
+  Sidebar → Search / My resumes / Profile / Settings
 ```
 
 ---
@@ -820,12 +910,14 @@ Alternative paths:
 
 | | |
 |---|---|
-| **Project** | TalentBridge marketing site |
+| **Project** | TalentBridge (marketing + auth + job seeker dashboard) |
 | **Package name** | `talent-bridge` |
 | **Version** | 0.1.0 |
-| **Last documented** | Reflects codebase including Outfit font, containerized heroes, ResumeMarquee, and CVGallery |
-| **Maintainer note** | Update this file when adding pages, sections, or API integrations |
+| **Client brand guide** | [docs/BRAND-GUIDE.md](docs/BRAND-GUIDE.md) |
+| **Doc index** | [docs/README.md](docs/README.md) |
+| **Last documented** | Marketing, auth flows, job seeker dashboard, brand guide split |
+| **Maintainer note** | Update this file for technical changes; update BRAND-GUIDE for client-visible UI/brand |
 
 ---
 
-*For a shorter quick-start, see `README.md`. For implementation planning history, refer to the project plan file (if present in `.cursor/plans/`).*
+*Quick-start: `README.md`. Brand & design (non-technical): [docs/BRAND-GUIDE.md](docs/BRAND-GUIDE.md).*
