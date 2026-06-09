@@ -2,14 +2,14 @@
 
 import { usePathname } from "next/navigation";
 
-import { DashboardSidebarFooter } from "@/components/dashboard/dashboard-sidebar-footer";
-import { DashboardSidebarLogout } from "@/components/dashboard/dashboard-sidebar-logout";
-import { DashboardSidebarRole } from "@/components/dashboard/dashboard-sidebar-role";
-import { DashboardSidebarSearch } from "@/components/dashboard/dashboard-sidebar-search";
+// import { DashboardSidebarFooter } from "@/components/dashboard/dashboard-sidebar-footer";
+// import { DashboardSidebarLogout } from "@/components/dashboard/dashboard-sidebar-logout";
+// import { DashboardSidebarRole } from "@/components/dashboard/dashboard-sidebar-role";
+// import { DashboardSidebarSearch } from "@/components/dashboard/dashboard-sidebar-search";
 import { DashboardTopActions } from "@/components/dashboard/dashboard-top-actions";
-import { StaggeredMenu } from "@/components/ui/staggered-menu";
+// import { StaggeredMenu } from "@/components/ui/staggered-menu";
 import { isHiringAgencyStandalonePage } from "@/config/dashboard-routes";
-import { hiringAgencyMenuItems } from "@/config/hiring-agency-menu";
+// import { hiringAgencyMenuItems } from "@/config/hiring-agency-menu";
 import { cn } from "@/lib/utils";
 
 type HiringAgencyDashboardShellProps = {
@@ -24,6 +24,7 @@ export function HiringAgencyDashboardShell({
 
   return (
     <div className="relative min-h-svh">
+      {/* Sidebar menu disabled for now
       <StaggeredMenu
         position="left"
         isFixed
@@ -45,6 +46,7 @@ export function HiringAgencyDashboardShell({
         panelFooter={<DashboardSidebarFooter />}
         panelFooterBottom={<DashboardSidebarLogout />}
       />
+      */}
 
       <DashboardTopActions />
 
@@ -57,6 +59,7 @@ export function HiringAgencyDashboardShell({
         {children}
       </main>
 
+      {/* Staggered menu styles disabled for now
       <style jsx global>{`
         .hiring-agency-staggered-menu .staggered-menu-header {
           justify-content: flex-start;
@@ -148,6 +151,7 @@ export function HiringAgencyDashboardShell({
           font-size: 0.8125rem;
         }
       `}</style>
+      */}
     </div>
   );
 }

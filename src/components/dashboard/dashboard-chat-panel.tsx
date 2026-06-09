@@ -22,6 +22,8 @@ type DashboardChatPanelProps = {
   eyebrow?: string;
   title?: string;
   headerAction?: ReactNode;
+  /** Hides the built-in header — use when wrapping with custom chrome. */
+  embedded?: boolean;
 };
 
 export function DashboardChatPanel({
@@ -32,6 +34,7 @@ export function DashboardChatPanel({
   eyebrow = "Chat",
   title = "Resume onboarding",
   headerAction,
+  embedded = false,
 }: DashboardChatPanelProps) {
   const endRef = useRef<HTMLDivElement | null>(null);
 
@@ -44,22 +47,26 @@ export function DashboardChatPanel({
   return (
     <section
       className={cn(
-        "flex h-full min-h-0 max-h-full flex-col overflow-hidden rounded-[28px] border border-ink-900/12 bg-paper-50 shadow-[0_2px_24px_rgba(8,8,12,0.04)] sm:rounded-[32px]",
+        "flex h-full min-h-0 max-h-full flex-col overflow-hidden",
+        !embedded &&
+          "rounded-[28px] border border-ink-900/12 bg-paper-50 shadow-[0_2px_24px_rgba(8,8,12,0.04)] sm:rounded-[32px]",
         className,
       )}
       aria-label="Chat"
     >
-      <div className="flex items-start justify-between gap-3 border-b border-ink-900/8 px-5 py-4">
-        <div className="min-w-0">
-          <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink-400">
-            {eyebrow}
-          </p>
-          <p className="mt-1 text-[14px] font-medium text-ink-950">{title}</p>
+      {!embedded ? (
+        <div className="flex items-start justify-between gap-3 border-b border-ink-900/8 px-5 py-4">
+          <div className="min-w-0">
+            <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink-400">
+              {eyebrow}
+            </p>
+            <p className="mt-1 text-[14px] font-medium text-ink-950">{title}</p>
+          </div>
+          {headerAction ? (
+            <div className="shrink-0">{headerAction}</div>
+          ) : null}
         </div>
-        {headerAction ? (
-          <div className="shrink-0">{headerAction}</div>
-        ) : null}
-      </div>
+      ) : null}
 
       <div
         className="flex-1 space-y-3 overflow-y-auto px-5 py-4"

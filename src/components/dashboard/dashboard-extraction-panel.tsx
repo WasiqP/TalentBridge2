@@ -22,6 +22,8 @@ type DashboardExtractionPanelProps = {
   heading?: string;
   fileHint?: string;
   ariaLabel?: string;
+  /** When true, all steps finished — show success state (no spinners). */
+  isComplete?: boolean;
 };
 
 export function DashboardExtractionPanel({
@@ -33,8 +35,15 @@ export function DashboardExtractionPanel({
   heading = "Building your profile in real time",
   fileHint = "Parsing sections and generating structured data",
   ariaLabel = "Resume extraction progress",
+  isComplete = false,
 }: DashboardExtractionPanelProps) {
   const isStandalone = variant === "standalone";
+  const headingText = isComplete
+    ? "Resume extracted successfully"
+    : heading;
+  const fileHintText = isComplete
+    ? "Your profile data is ready — continue when you're ready."
+    : fileHint;
 
   return (
     <section
@@ -52,7 +61,7 @@ export function DashboardExtractionPanel({
           <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink-400">
             {eyebrow}
           </p>
-          <p className="mt-1 text-[14px] font-medium text-ink-950">{heading}</p>
+          <p className="mt-1 text-[14px] font-medium text-ink-950">{headingText}</p>
         </div>
         <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-ink-900/10 bg-paper-100">
           <Sparkles className="h-5 w-5 text-ink-800" aria-hidden />
@@ -64,23 +73,66 @@ export function DashboardExtractionPanel({
         data-lenis-prevent
         data-lenis-prevent-wheel
       >
-        <div className="rounded-2xl border border-ink-900/14 bg-paper-100/90 px-4 py-3.5 shadow-[0_2px_12px_rgba(8,8,12,0.04)]">
+        <div
+          className={cn(
+            "rounded-2xl border px-4 py-3.5 shadow-[0_2px_12px_rgba(8,8,12,0.04)] transition-colors",
+            isComplete
+              ? "border-accent-lime/40 bg-accent-lime/10"
+              : "border-ink-900/14 bg-paper-100/90",
+          )}
+        >
           <div className="flex items-center gap-3">
-            <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-ink-900/10 bg-paper-50">
-              <FileText className="h-5 w-5 text-ink-800" aria-hidden />
+            <span
+              className={cn(
+                "inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border bg-paper-50",
+                isComplete ? "border-accent-lime/35" : "border-ink-900/10",
+              )}
+            >
+              {isComplete ? (
+                <CheckCircle2
+                  className="h-5 w-5 text-accent-lime-dark"
+                  aria-hidden
+                />
+              ) : (
+                <FileText className="h-5 w-5 text-ink-800" aria-hidden />
+              )}
             </span>
             <div className="min-w-0">
               <p className="truncate text-[14px] font-semibold text-ink-950">
                 {fileName ?? "Resume"}
               </p>
-              <p className="text-[12px] leading-relaxed text-ink-500">{fileHint}</p>
+              <p className="text-[12px] leading-relaxed text-ink-500">
+                {fileHintText}
+              </p>
             </div>
-            <Loader2
-              className="ml-auto h-4 w-4 shrink-0 animate-spin text-ink-500"
-              aria-hidden
-            />
+            {!isComplete ? (
+              <Loader2
+                className="ml-auto h-4 w-4 shrink-0 animate-spin text-ink-500"
+                aria-hidden
+              />
+            ) : null}
           </div>
         </div>
+
+        <AnimatePresence>
+          {isComplete ? (
+            <motion.p
+              key="success"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+              className="mt-3 flex items-center gap-2 rounded-2xl border border-accent-lime/35 bg-accent-lime/15 px-4 py-3 text-[13px] font-medium text-ink-900 sm:text-[14px]"
+              role="status"
+            >
+              <CheckCircle2
+                className="h-4 w-4 shrink-0 text-accent-lime-dark"
+                aria-hidden
+              />
+              Resume extracted successfully
+            </motion.p>
+          ) : null}
+        </AnimatePresence>
 
         <ol className="mt-4 space-y-3">
           <AnimatePresence initial={false}>
