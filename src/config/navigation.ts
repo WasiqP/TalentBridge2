@@ -2,6 +2,7 @@ import type { NavItem } from "@/types";
 
 export const mainNav: NavItem[] = [
   { title: "Home", href: "/" },
+  { title: "For Job Seekers", href: "/guest-page" },
   { title: "Features", href: "/features" },
   { title: "Solutions", href: "/solutions/recruiter" },
   { title: "Customers", href: "/customers" },
@@ -29,6 +30,7 @@ export const footerNav = {
     { title: "HR Leaders", href: "/solutions/hr-lead" },
   ],
   resources: [
+    { title: "For Job Seekers", href: "/guest-page" },
     { title: "Blog", href: "/blog" },
     { title: "Customers", href: "/customers" },
     { title: "Contact", href: "/contact" },
