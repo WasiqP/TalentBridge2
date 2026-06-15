@@ -77,7 +77,7 @@ export function ForgotPasswordForm() {
       <div className="flex items-start gap-3 rounded-2xl border border-ink-900/8 bg-paper-100 px-4 py-3.5">
         <Mail className="mt-0.5 h-4 w-4 shrink-0 text-ink-500" />
         <p className="text-pretty text-[13px] leading-relaxed text-ink-600">
-          Enter the email you use for TalentBridge. We&apos;ll send a one-time
+          Enter the email you use for TalentDrobe. We&apos;ll send a one-time
           code to verify it&apos;s you.
         </p>
       </div>

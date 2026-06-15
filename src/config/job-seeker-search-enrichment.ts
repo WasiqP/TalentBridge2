@@ -263,7 +263,7 @@ export function enrichJobSearchResult(
     responsibilities: responsibilitiesFor(job),
     requirements: requirementsFor(job),
     benefits: benefitsFor(job),
-    companyAbout: `${job.companyName} operates in ${job.companyMeta}. Employees rate the organization ${job.rating.toFixed(1)} out of 5 across ${job.reviewCount} reviews on TalentBridge. The company invests in cross-functional teams, transparent goal-setting, and hiring people who raise the bar for their discipline.`,
+    companyAbout: `${job.companyName} operates in ${job.companyMeta}. Employees rate the organization ${job.rating.toFixed(1)} out of 5 across ${job.reviewCount} reviews on TalentDrobe. The company invests in cross-functional teams, transparent goal-setting, and hiring people who raise the bar for their discipline.`,
     companyWebsite: `https://${companySlug(job.companyName)}.com`,
     hiringAgencyName: agency.name,
     hiringAgencyAbout: agency.about,

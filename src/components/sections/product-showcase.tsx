@@ -7,7 +7,7 @@ import { FadeUp } from "@/components/motion/fade-up";
 import { Container } from "@/components/ui/container";
 import { SectionHeading } from "@/components/ui/section-heading";
 
-const tabs = [
+export const productShowcaseTabs = [
   {
     id: "sourcing",
     label: "Sourcing",
@@ -77,9 +77,9 @@ export function ProductShowcase() {
         </FadeUp>
 
         <FadeUp delay={0.05}>
-          <Tabs.Root defaultValue={tabs[0].id} className="mt-14">
+          <Tabs.Root defaultValue={productShowcaseTabs[0].id} className="mt-14">
             <Tabs.List className="mx-auto flex w-fit gap-1 rounded-full border border-ink-900/10 bg-paper-50 p-1">
-              {tabs.map((t) => (
+              {productShowcaseTabs.map((t) => (
                 <Tabs.Trigger
                   key={t.id}
                   value={t.id}
@@ -91,7 +91,7 @@ export function ProductShowcase() {
             </Tabs.List>
 
             <div className="mt-10">
-              {tabs.map((t) => (
+              {productShowcaseTabs.map((t) => (
                 <Tabs.Content key={t.id} value={t.id}>
                   <motion.div
                     initial={{ opacity: 0, y: 16 }}
@@ -127,7 +127,7 @@ export function ProductShowcase() {
   );
 }
 
-function ProductMockup({ id }: { id: string }) {
+export function ProductMockup({ id }: { id: string }) {
   return (
     <div className="relative overflow-hidden rounded-3xl border border-ink-900/8 bg-ink-950 p-2 text-paper-50">
       <div className="rounded-2xl border border-paper-50/8 bg-ink-900/50 p-5">

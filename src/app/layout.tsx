@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { Outfit, Geist_Mono, Instrument_Serif } from "next/font/google";
+import { Outfit, Geist_Mono, Instrument_Serif, Poppins } from "next/font/google";
 
 import { ConditionalAnnouncementBar } from "@/components/layout/conditional-announcement-bar";
 import { ConditionalFooter } from "@/components/layout/conditional-footer";
 import { ConditionalHeader } from "@/components/layout/conditional-header";
+import { MarketingChrome } from "@/components/marketing/marketing-chrome";
 import { LenisProvider } from "@/components/motion/lenis-provider";
 import { siteConfig } from "@/config/site";
 
@@ -30,6 +31,13 @@ const instrumentSerif = Instrument_Serif({
   display: "swap",
 });
 
+const poppins = Poppins({
+  variable: "--font-poppins",
+  subsets: ["latin"],
+  weight: ["700"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: {
     default: `${siteConfig.name} — ${siteConfig.tagline}`,
@@ -38,13 +46,13 @@ export const metadata: Metadata = {
   description: siteConfig.description,
   metadataBase: new URL(siteConfig.url),
   keywords: [
+    "job search",
+    "career platform",
+    "CV upload",
+    "role matching",
+    "job seeker",
     "AI recruiting",
-    "AI sourcing",
     "talent intelligence",
-    "candidate screening",
-    "recruiter copilot",
-    "applicant tracking",
-    "HR automation",
   ],
   authors: [{ name: siteConfig.name }],
   openGraph: {
@@ -74,10 +82,11 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${outfit.variable} ${geistMono.variable} ${instrumentSerif.variable}`}
+      className={`${outfit.variable} ${geistMono.variable} ${instrumentSerif.variable} ${poppins.variable}`}
     >
       <body className="min-h-screen overflow-x-clip font-sans">
         <LenisProvider>
+          <MarketingChrome />
           <ConditionalAnnouncementBar />
           <ConditionalHeader />
           <main>{children}</main>

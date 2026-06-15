@@ -25,7 +25,7 @@ export function CVGallery() {
                 </span>
               </>
             }
-            description="Hover any candidate to read their full CV — the kind of thing TalentBridge surfaces dozens of times a day, automatically."
+            description="Hover any candidate to read their full CV — the kind of thing TalentDrobe surfaces dozens of times a day, automatically."
             centered
           />
         </FadeUp>

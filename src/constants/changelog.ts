@@ -49,7 +49,7 @@ export const changelog: ChangelogEntry[] = [
     title: "Multi-agent pipeline mode",
     type: "feature",
     description:
-      "The biggest release yet — TalentBridge is now a true multi-agent system. Sourcing, screening, outreach, and scheduling agents all coordinate in the background.",
+      "The biggest release yet — TalentDrobe is now a true multi-agent system. Sourcing, screening, outreach, and scheduling agents all coordinate in the background.",
     bullets: [
       "Per-role agent budgets",
       "Recruiter approval checkpoints",

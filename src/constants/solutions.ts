@@ -6,7 +6,7 @@ export const solutions: Solution[] = [
     title: "For Recruiters",
     hero: "Source smarter. Reply warmer. Close faster.",
     description:
-      "Stop drowning in Boolean searches and cold templates. TalentBridge handles the busywork so you can spend your day in real conversations.",
+      "Stop drowning in Boolean searches and cold templates. TalentDrobe handles the busywork so you can spend your day in real conversations.",
     challenges: [
       "Burned out on sourcing across 8 tabs",
       "Outreach replies hovering near 12%",

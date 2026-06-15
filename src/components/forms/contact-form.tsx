@@ -55,7 +55,7 @@ export function ContactForm() {
           Thanks — your demo request is in.
         </h3>
         <p className="mt-3 text-sm text-ink-500">
-          A member of the TalentBridge team will email you within one business
+          A member of the TalentDrobe team will email you within one business
           day.
         </p>
       </div>

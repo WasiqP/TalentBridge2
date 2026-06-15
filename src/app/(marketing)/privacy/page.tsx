@@ -6,14 +6,14 @@ import { Container } from "@/components/ui/container";
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
-    "How TalentBridge handles your data, your candidates' data, and the principles behind every line of our code.",
+    "How TalentDrobe handles your data, your candidates' data, and the principles behind every line of our code.",
 };
 
 const sections = [
   {
     id: "overview",
     title: "Overview",
-    body: "TalentBridge ('we', 'us') builds AI tooling for recruiters. This policy describes the data we collect, how we use it, who we share it with, and the rights you have. We are SOC 2 Type II certified and operate under GDPR and CCPA. We do not sell personal data.",
+    body: "TalentDrobe ('we', 'us') builds AI tooling for recruiters. This policy describes the data we collect, how we use it, who we share it with, and the rights you have. We are SOC 2 Type II certified and operate under GDPR and CCPA. We do not sell personal data.",
   },
   {
     id: "data-we-collect",
@@ -33,7 +33,7 @@ const sections = [
   {
     id: "your-rights",
     title: "Your rights",
-    body: "You can access, correct, export, or delete your data at any time from product settings or by writing to privacy@talentbridge.ai. We respond within 30 days. EU residents may file a complaint with their supervisory authority.",
+    body: "You can access, correct, export, or delete your data at any time from product settings or by writing to privacy@talentdrobe.ai. We respond within 30 days. EU residents may file a complaint with their supervisory authority.",
   },
   {
     id: "security",
@@ -48,7 +48,7 @@ const sections = [
   {
     id: "contact",
     title: "Contact",
-    body: "Questions? Write to privacy@talentbridge.ai or to our mailing address on the contact page. For DPA, BAA, or other compliance documentation, request from your account manager or sales@talentbridge.ai.",
+    body: "Questions? Write to privacy@talentdrobe.ai or to our mailing address on the contact page. For DPA, BAA, or other compliance documentation, request from your account manager or sales@talentdrobe.ai.",
   },
 ];
 

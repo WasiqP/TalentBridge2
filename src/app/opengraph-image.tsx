@@ -84,7 +84,7 @@ export default function OpengraphImage() {
             color: "rgba(250,250,247,0.5)",
           }}
         >
-          <span>talentbridge.ai</span>
+          <span>talentdrobe.ai</span>
           <span>SOC 2 Type II · GDPR · CCPA</span>
         </div>
       </div>

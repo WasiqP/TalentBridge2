@@ -20,7 +20,7 @@ import { features } from "@/constants/features";
 export const metadata: Metadata = {
   title: "Features",
   description:
-    "Explore every capability of TalentBridge — autonomous sourcing, explainable ranking, personalized outreach, and pipeline analytics.",
+    "Explore every capability of TalentDrobe — autonomous sourcing, explainable ranking, personalized outreach, and pipeline analytics.",
 };
 
 const icons: Record<string, LucideIcon> = {

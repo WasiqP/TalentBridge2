@@ -22,7 +22,7 @@ const EASE = [0.22, 1, 0.36, 1] as const;
 const WELCOME_MESSAGE: ChatMessage = {
   id: "welcome",
   role: "assistant",
-  content: `Hi ${getProfileFirstName(jobSeekerProfile.name)} — I'm your TalentBridge copilot. Ask me to refine your profile, suggest roles, or improve your resume bullets.`,
+  content: `Hi ${getProfileFirstName(jobSeekerProfile.name)} — I'm your TalentDrobe copilot. Ask me to refine your profile, suggest roles, or improve your resume bullets.`,
 };
 
 export function getMockReply(message: string): string {
@@ -145,7 +145,7 @@ export function DashboardFloatingChat({ className }: DashboardFloatingChatProps)
             )}
             role="dialog"
             aria-modal="true"
-            aria-label="TalentBridge copilot chat"
+            aria-label="TalentDrobe copilot chat"
           >
             <div className="flex items-center justify-between gap-3 border-b border-ink-900/8 px-4 py-3 sm:px-5">
               <div className="flex min-w-0 items-center gap-3">
@@ -157,7 +157,7 @@ export function DashboardFloatingChat({ className }: DashboardFloatingChatProps)
                     Copilot
                   </p>
                   <p className="truncate text-[14px] font-medium text-ink-950">
-                    TalentBridge assistant
+                    TalentDrobe assistant
                   </p>
                 </div>
               </div>

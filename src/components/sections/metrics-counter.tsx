@@ -19,7 +19,7 @@ export function MetricsCounter() {
                 </span>
               </>
             }
-            description="What teams report after 90 days on TalentBridge — measured against their own pre-launch baseline."
+            description="What teams report after 90 days on TalentDrobe — measured against their own pre-launch baseline."
             centered
           />
         </FadeUp>

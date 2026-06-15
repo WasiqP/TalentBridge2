@@ -6,19 +6,19 @@ import { Container } from "@/components/ui/container";
 export const metadata: Metadata = {
   title: "Terms of Service",
   description:
-    "The rules of the road for using TalentBridge. Short, clear, and written so a human can read them.",
+    "The rules of the road for using TalentDrobe. Short, clear, and written so a human can read them.",
 };
 
 const sections = [
   {
     id: "acceptance",
     title: "Acceptance of terms",
-    body: "By creating an account or using TalentBridge, you agree to these Terms and our Privacy Policy. If you're using TalentBridge on behalf of an organization, you confirm that you have authority to bind that organization.",
+    body: "By creating an account or using TalentDrobe, you agree to these Terms and our Privacy Policy. If you're using TalentDrobe on behalf of an organization, you confirm that you have authority to bind that organization.",
   },
   {
     id: "service",
     title: "The service",
-    body: "TalentBridge provides AI-powered recruiting tooling — sourcing, screening, outreach, analytics. We continuously improve the product and may add, remove, or change features. Material changes are announced in advance.",
+    body: "TalentDrobe provides AI-powered recruiting tooling — sourcing, screening, outreach, analytics. We continuously improve the product and may add, remove, or change features. Material changes are announced in advance.",
   },
   {
     id: "your-account",
@@ -28,7 +28,7 @@ const sections = [
   {
     id: "acceptable-use",
     title: "Acceptable use",
-    body: "Use TalentBridge for lawful recruiting activities only. Don't reverse-engineer the service, attempt to evade rate limits, send spam, infringe on any rights, or use the platform in ways that would discriminate against protected classes. We reserve the right to terminate accounts violating these rules.",
+    body: "Use TalentDrobe for lawful recruiting activities only. Don't reverse-engineer the service, attempt to evade rate limits, send spam, infringe on any rights, or use the platform in ways that would discriminate against protected classes. We reserve the right to terminate accounts violating these rules.",
   },
   {
     id: "fees",
@@ -38,12 +38,12 @@ const sections = [
   {
     id: "ip",
     title: "Intellectual property",
-    body: "You retain all rights to your data and your candidates' data. We retain all rights to the TalentBridge service. AI outputs generated for your team are yours to use; please attribute generated content appropriately when shared externally.",
+    body: "You retain all rights to your data and your candidates' data. We retain all rights to the TalentDrobe service. AI outputs generated for your team are yours to use; please attribute generated content appropriately when shared externally.",
   },
   {
     id: "liability",
     title: "Limitation of liability",
-    body: "To the maximum extent permitted by law, TalentBridge is not liable for indirect, incidental, or consequential damages. Aggregate liability is capped at the fees paid in the 12 months preceding the claim.",
+    body: "To the maximum extent permitted by law, TalentDrobe is not liable for indirect, incidental, or consequential damages. Aggregate liability is capped at the fees paid in the 12 months preceding the claim.",
   },
   {
     id: "termination",

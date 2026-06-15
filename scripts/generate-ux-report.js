@@ -14,9 +14,9 @@ const doc = new PDFDocument({
   margins: { top: 60, bottom: 60, left: 60, right: 60 },
   info: {
     Title: 'UX Research Report: Top 5 Job Platforms 2026',
-    Author: 'TalentBridge Research',
+    Author: 'TalentDrobe Research',
     Subject: 'Competitive UX Analysis — Monster, Indeed, LinkedIn, Dice, FlexJobs',
-    Creator: 'TalentBridge',
+    Creator: 'TalentDrobe',
   },
 });
 
@@ -57,7 +57,7 @@ function drawPageNumber() {
   doc
     .fontSize(8)
     .fillColor(C.muted)
-    .text(`TalentBridge — UX Research Report 2026 | Page ${pageNum}`, LEFT, doc.page.height - 40, {
+    .text(`TalentDrobe — UX Research Report 2026 | Page ${pageNum}`, LEFT, doc.page.height - 40, {
       width: PAGE_W,
       align: 'center',
     });
@@ -262,7 +262,7 @@ doc
   .font('Helvetica')
   .fillColor('#D1D5DB')
   .text(
-    'A concentrated deep-dive into the features, UI/UX patterns, strengths, weaknesses, and competitive positioning of the five most significant job platforms — researched to inform TalentBridge product strategy.',
+    'A concentrated deep-dive into the features, UI/UX patterns, strengths, weaknesses, and competitive positioning of the five most significant job platforms — researched to inform TalentDrobe product strategy.',
     LEFT, 278, { width: PAGE_W, lineGap: 5 }
   );
 
@@ -273,7 +273,7 @@ doc
   .text('Prepared for:', LEFT, 380)
   .fillColor(C.white)
   .font('Helvetica-Bold')
-  .text('TalentBridge Product Team', LEFT, 396)
+  .text('TalentDrobe Product Team', LEFT, 396)
   .font('Helvetica')
   .fillColor('#6B7280')
   .text('Research Date:', LEFT, 420)
@@ -334,7 +334,7 @@ const tocItems = [
   ['05', 'Platform Analysis — Dice.com', ''],
   ['06', 'Platform Analysis — FlexJobs.com', ''],
   ['07', 'Competitive Comparison Matrix', ''],
-  ['08', 'Key Insights & TalentBridge Opportunity', ''],
+  ['08', 'Key Insights & TalentDrobe Opportunity', ''],
 ];
 
 tocItems.forEach(([num, title]) => {
@@ -377,7 +377,7 @@ bodyText(
   'This report documents a concentrated UX research study of the five most significant job platforms in the US market: Monster, Indeed, LinkedIn, Dice, and FlexJobs. Research was conducted in June 2026 via direct platform analysis, live product evaluation, and secondary research sources.'
 );
 bodyText(
-  'The goal is to understand each platform\'s feature set, UI/UX philosophy, core value proposition, and strategic weaknesses — as direct input into TalentBridge product strategy and differentiation.'
+  'The goal is to understand each platform\'s feature set, UI/UX philosophy, core value proposition, and strategic weaknesses — as direct input into TalentDrobe product strategy and differentiation.'
 );
 
 subHeading('Research Scope');
@@ -714,13 +714,13 @@ doc
   .fontSize(20)
   .font('Helvetica-Bold')
   .fillColor(C.heading)
-  .text('Key Insights & TalentBridge Opportunity', LEFT, doc.y);
+  .text('Key Insights & TalentDrobe Opportunity', LEFT, doc.y);
 doc.y += 6;
 hRule(doc.y, C.accent, 2);
 doc.y += 16;
 
 sectionHeading('What Every Platform Does Poorly');
-bodyText('These are systemic gaps across all five platforms — unmet user needs that represent direct product opportunities for TalentBridge:');
+bodyText('These are systemic gaps across all five platforms — unmet user needs that represent direct product opportunities for TalentDrobe:');
 doc.y += 6;
 
 const gaps = [
@@ -751,7 +751,7 @@ gaps.forEach(([title, desc]) => {
 
 checkIfNewPage(180);
 sectionHeading('Visual USP Gaps');
-bodyText('Every platform in this analysis has a significant visual or experiential weakness TalentBridge can exploit:');
+bodyText('Every platform in this analysis has a significant visual or experiential weakness TalentDrobe can exploit:');
 doc.y += 6;
 bullet('Monster: Dated, cluttered, no design identity');
 bullet('Indeed: Utilitarian and emotionally flat — zero delight moments in the entire user journey');
@@ -760,7 +760,7 @@ bullet('Dice: Functionally sound but emotionally cold — no inspiration, no ene
 bullet('FlexJobs: Trustworthy but static — clean design but no dynamism or modern interaction patterns');
 
 checkIfNewPage(120);
-sectionHeading('TalentBridge Strategic Position');
+sectionHeading('TalentDrobe Strategic Position');
 doc.y += 4;
 doc.rect(LEFT, doc.y, PAGE_W, 90).fill(C.ink);
 const boxY2 = doc.y;
@@ -774,7 +774,7 @@ doc
   .font('Helvetica')
   .fillColor('#D1D5DB')
   .text(
-    'TalentBridge has an opportunity to combine AI matching depth (Indeed-level), network context (LinkedIn-lite), curation trust (FlexJobs vetting), and genuinely beautiful modern UI (none of the above) — while making the job seeker feel seen as a person rather than processed as a data point.',
+    'TalentDrobe has an opportunity to combine AI matching depth (Indeed-level), network context (LinkedIn-lite), curation trust (FlexJobs vetting), and genuinely beautiful modern UI (none of the above) — while making the job seeker feel seen as a person rather than processed as a data point.',
     LEFT + 16, boxY2 + 34, { width: PAGE_W - 32, lineGap: 4 }
   );
 doc.y = boxY2 + 98;

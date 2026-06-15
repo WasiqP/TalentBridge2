@@ -92,7 +92,7 @@ export function JobSeekerSettingsPage() {
         </h1>
         <p className="mt-2 max-w-xl text-[15px] leading-relaxed text-ink-500">
           Manage your account, how we notify you, and what recruiters see when
-          you apply through TalentBridge.
+          you apply through TalentDrobe.
         </p>
       </header>
 
@@ -258,7 +258,7 @@ export function JobSeekerSettingsPage() {
           <SettingsSection
             id="settings-privacy"
             title="Privacy & data"
-            description="Control visibility and how your data is used on TalentBridge."
+            description="Control visibility and how your data is used on TalentDrobe."
           >
             <SettingsToggleRow
               label="Public profile"

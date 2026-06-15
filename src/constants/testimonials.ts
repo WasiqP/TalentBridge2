@@ -15,7 +15,7 @@ export const testimonials: Testimonial[] = [
     role: "VP People",
     company: "Quanta",
     quote:
-      "TalentBridge replaced four point tools and a contractor. The ROI showed up in week two.",
+      "TalentDrobe replaced four point tools and a contractor. The ROI showed up in week two.",
   },
   {
     id: "3",

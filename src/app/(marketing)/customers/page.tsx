@@ -12,7 +12,7 @@ import { customerStories } from "@/constants/customers";
 export const metadata: Metadata = {
   title: "Customers",
   description:
-    "How leading talent orgs are using TalentBridge to source, screen, and hire 10x faster.",
+    "How leading talent orgs are using TalentDrobe to source, screen, and hire 10x faster.",
 };
 
 export default function CustomersPage() {
@@ -22,7 +22,7 @@ export default function CustomersPage() {
         eyebrow="Customers"
         title="Loved by teams who"
         italic="stopped settling for slow."
-        description="A small selection of the recruiting orgs who let TalentBridge handle the grind — and reinvested the time in better hires."
+        description="A small selection of the recruiting orgs who let TalentDrobe handle the grind — and reinvested the time in better hires."
       />
 
       <LogoMarquee />

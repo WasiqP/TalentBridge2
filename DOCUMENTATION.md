@@ -1,6 +1,6 @@
-# TalentBridge — Complete Project Documentation
+# TalentDrobe — Complete Project Documentation
 
-This document explains **everything** built in the TalentBridge application so far. It is written for developers and technical teammates who need routes, file paths, and APIs.
+This document explains **everything** built in the TalentDrobe application so far. It is written for developers and technical teammates who need routes, file paths, and APIs.
 
 **For clients and non-technical reviewers:** use the plain-language **[Brand & Design Guide](docs/BRAND-GUIDE.md)** (colors, typography, components, UX). Index: [docs/README.md](docs/README.md).
 
@@ -32,11 +32,11 @@ This document explains **everything** built in the TalentBridge application so f
 
 ## 1. What is this project?
 
-**TalentBridge** is a **Next.js web application** for an **AI recruiting copilot** — public marketing, account flows, and a **job seeker dashboard** (in progress).
+**TalentDrobe** is a **Next.js web application** for an **AI recruiting copilot** — public marketing, account flows, and a **job seeker dashboard** (in progress).
 
 ### Product pitch (what the site sells)
 
-TalentBridge helps recruiting teams:
+TalentDrobe helps recruiting teams:
 
 - Parse and rank inbound resumes quickly
 - Draft personalized outreach at scale
@@ -84,7 +84,7 @@ TalentBridge helps recruiting teams:
 
 ```bash
 # 1. Go to the project folder
-cd TalentBridge2
+cd TalentDrobe2
 
 # 2. Install dependencies
 npm install
@@ -179,7 +179,7 @@ Many heroes are **not full-bleed edge-to-edge**. They sit inside a rounded dark 
 ## 6. Project folder structure
 
 ```
-TalentBridge2/
+TalentDrobe2/
 ├── public/                    # Static assets (currently minimal)
 ├── src/
 │   ├── app/                   # Next.js App Router — routes live here
@@ -270,7 +270,7 @@ Every page is wrapped in this structure:
 - Newsletter signup form
 - Legal links: Privacy, Terms
 - Social: Twitter, LinkedIn
-- Large watermark text: "TalentBridge"
+- Large watermark text: "TalentDrobe"
 
 ---
 
@@ -605,8 +605,8 @@ Forms: `src/components/forms/sign-in-form.tsx`, `sign-up-form.tsx`, `verify-code
 
 Set in `src/app/layout.tsx`:
 
-- Default title: `TalentBridge — The AI Copilot for Recruiters`
-- Title template: `%s · TalentBridge` (per-page titles append brand)
+- Default title: `TalentDrobe — The AI Copilot for Recruiters`
+- Title template: `%s · TalentDrobe` (per-page titles append brand)
 - Description, keywords, Open Graph, Twitter card
 - `metadataBase` from `NEXT_PUBLIC_APP_URL`
 
@@ -822,7 +822,7 @@ All marketing copy is **editable in code** — no CMS.
 
 | Variable | Required | Default | Purpose |
 |----------|----------|---------|---------|
-| `NEXT_PUBLIC_APP_URL` | Optional | `https://talentbridge.ai` | Canonical URL for metadata, sitemap, OG |
+| `NEXT_PUBLIC_APP_URL` | Optional | `https://talentdrobe.ai` | Canonical URL for metadata, sitemap, OG |
 
 Copy to `.env.local` for local development:
 
@@ -910,8 +910,8 @@ Dashboard (job seeker):
 
 | | |
 |---|---|
-| **Project** | TalentBridge (marketing + auth + job seeker dashboard) |
-| **Package name** | `talent-bridge` |
+| **Project** | TalentDrobe (marketing + auth + job seeker dashboard) |
+| **Package name** | `talent-drobe` |
 | **Version** | 0.1.0 |
 | **Client brand guide** | [docs/BRAND-GUIDE.md](docs/BRAND-GUIDE.md) |
 | **Doc index** | [docs/README.md](docs/README.md) |

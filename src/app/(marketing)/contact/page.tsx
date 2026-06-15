@@ -10,7 +10,7 @@ import { siteConfig } from "@/config/site";
 export const metadata: Metadata = {
   title: "Book a demo",
   description:
-    "See TalentBridge end-to-end in 30 minutes. Tailored to your stack, your roles, your team.",
+    "See TalentDrobe end-to-end in 30 minutes. Tailored to your stack, your roles, your team.",
 };
 
 export default function ContactPage() {

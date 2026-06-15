@@ -1,6 +1,6 @@
-# TalentBridge — Brand & Design Guide
+# TalentDrobe — Brand & Design Guide
 
-**Who this is for:** Clients, stakeholders, marketers, and anyone reviewing TalentBridge without reading code.
+**Who this is for:** Clients, stakeholders, marketers, and anyone reviewing TalentDrobe without reading code.
 
 **What this covers:** How the product looks and feels today — colors, fonts, buttons, page sections, sign-in screens, and the job seeker dashboard — plus where written content lives if you need updates.
 
@@ -49,7 +49,7 @@
 
 ## 2. Introduction
 
-**TalentBridge** is presented as an **AI recruiting copilot** — software that helps recruiting teams source, screen, and engage candidates faster.
+**TalentDrobe** is presented as an **AI recruiting copilot** — software that helps recruiting teams source, screen, and engage candidates faster.
 
 The experience today has three main areas:
 
@@ -71,7 +71,7 @@ The experience today has three main areas:
 
 | Item | Value |
 |------|--------|
-| Product name | **TalentBridge** |
+| Product name | **TalentDrobe** |
 | Short descriptor | The AI Copilot for Recruiters |
 | Long description | AI recruiting copilot that sources, screens, and engages candidates 10x faster |
 
@@ -80,7 +80,7 @@ The experience today has three main areas:
 The logo has two parts:
 
 1. **Icon** — A small rounded square with a lime → cyan → violet gradient and a simple “bridge” mark inside.
-2. **Wordmark** — The text “TalentBridge” beside the icon.
+2. **Wordmark** — The text “TalentDrobe” beside the icon.
 
 **When to use which version:**
 
@@ -101,8 +101,8 @@ The logo always links to the home page unless you are already in a focused flow 
 
 | Channel | Typical use |
 |---------|-------------|
-| hello@talentbridge.ai | General contact |
-| sales@talentbridge.ai | Sales / demo |
+| hello@talentdrobe.ai | General contact |
+| sales@talentdrobe.ai | Sales / demo |
 | Twitter / LinkedIn / GitHub | Linked from footer and metadata |
 
 ---
@@ -337,7 +337,7 @@ Side padding keeps content readable on phones and tablets.
 
 - **Dark** section with gradient mesh; multiple link columns (Product, Solutions, Resources, Company).
 - **Newsletter** signup, legal links (Privacy, Terms), social icons.
-- Large decorative “TalentBridge” watermark.
+- Large decorative “TalentDrobe” watermark.
 - **Hidden** on auth routes that use minimal chrome (sign-in, sign-up, etc.).
 
 ---
@@ -517,7 +517,7 @@ Grouped for easy review. Each item: **what it looks like → where it appears �
 
 | Name | What it looks like | Where | Purpose |
 |------|-------------------|-------|---------|
-| **Logo** | Gradient icon + “TalentBridge” wordmark | Header, footer, auth, dashboard | Brand home link |
+| **Logo** | Gradient icon + “TalentDrobe” wordmark | Header, footer, auth, dashboard | Brand home link |
 | **Header** | Sticky frosted nav with links and CTAs | Marketing pages | Global navigation |
 | **Footer** | Dark multi-column links + newsletter | Marketing pages | Links, legal, email capture |
 | **Announcement bar** | Thin top promo strip | Marketing pages | Highlight news / releases |
@@ -667,7 +667,7 @@ Grouped for easy review. Each item: **what it looks like → where it appears �
 | **Audience** | Non-technical clients and stakeholders |
 | **Companion doc** | [DOCUMENTATION.md](../DOCUMENTATION.md) (developers) |
 | **Index** | [docs/README.md](./README.md) |
-| **Product** | TalentBridge |
+| **Product** | TalentDrobe |
 | **Maintainer note** | Update when new UI areas ship (e.g. hiring agency dashboard) |
 
 ---

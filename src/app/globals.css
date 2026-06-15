@@ -222,4 +222,13 @@
   .animate-pulse-ring {
     animation: pulse-ring 2.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
   }
+
+  @keyframes shimmer {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
 }

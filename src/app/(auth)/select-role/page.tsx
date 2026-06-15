@@ -5,7 +5,7 @@ import { SelectRoleForm } from "@/components/forms/select-role-form";
 
 export const metadata: Metadata = {
   title: "Choose your role",
-  description: "Tell us how you'll use TalentBridge — as a job seeker or recruiter.",
+  description: "Tell us how you'll use TalentDrobe — as a job seeker or recruiter.",
   robots: { index: false, follow: false },
 };
 
@@ -14,7 +14,7 @@ export default function SelectRolePage() {
     <AuthShell
       layout="centered"
       title="Choose your role"
-      subtitle="This shapes your experience — pick the path that matches how you'll use TalentBridge."
+      subtitle="This shapes your experience — pick the path that matches how you'll use TalentDrobe."
     >
       <SelectRoleForm />
     </AuthShell>

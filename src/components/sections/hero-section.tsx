@@ -184,7 +184,7 @@ function HeroProductPreview() {
             <span className="h-2.5 w-2.5 rounded-full bg-paper-50/20" />
             <span className="h-2.5 w-2.5 rounded-full bg-paper-50/20" />
             <span className="ml-3 hidden rounded-md bg-paper-50/5 px-2 py-0.5 font-mono text-[11px] text-paper-100/50 sm:inline-block">
-              talentbridge.app/pipeline/senior-platform-engineer
+              talentdrobe.app/pipeline/senior-platform-engineer
             </span>
           </div>
           <div className="grid grid-cols-12 gap-0">

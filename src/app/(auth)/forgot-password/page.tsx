@@ -5,7 +5,7 @@ import { ForgotPasswordForm } from "@/components/forms/forgot-password-form";
 
 export const metadata: Metadata = {
   title: "Forgot password",
-  description: "Reset your TalentBridge password.",
+  description: "Reset your TalentDrobe password.",
   robots: { index: false, follow: false },
 };
 

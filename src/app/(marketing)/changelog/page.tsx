@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 export const metadata: Metadata = {
   title: "Changelog",
   description:
-    "Every release, every shipped improvement. The latest from TalentBridge.",
+    "Every release, every shipped improvement. The latest from TalentDrobe.",
 };
 
 const typeStyles = {
@@ -26,7 +26,7 @@ export default function ChangelogPage() {
         eyebrow="Changelog"
         title="Every release."
         italic="Every shipped improvement."
-        description="We ship the work, then write about it. A running log of what's new at TalentBridge."
+        description="We ship the work, then write about it. A running log of what's new at TalentDrobe."
       />
 
       <section className="bg-paper-50 py-20 sm:py-28">

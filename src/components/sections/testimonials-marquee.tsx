@@ -21,7 +21,7 @@ export function TestimonialsMarquee() {
                 <span className="font-serif italic text-ink-700">stopped settling.</span>
               </>
             }
-            description="Real quotes from recruiters and HR leaders using TalentBridge every day."
+            description="Real quotes from recruiters and HR leaders using TalentDrobe every day."
             centered
           />
         </FadeUp>

@@ -75,7 +75,7 @@ export default async function SolutionPage({ params }: PageProps) {
             </FadeUp>
             <FadeUp delay={0.1}>
               <p className="text-[11px] uppercase tracking-[0.18em] text-ink-500">
-                With TalentBridge
+                With TalentDrobe
               </p>
               <h2 className="mt-4 text-balance text-3xl font-medium tracking-tight text-ink-950 sm:text-4xl">
                 After 90 days, teams see…

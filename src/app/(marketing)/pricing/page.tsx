@@ -12,7 +12,7 @@ import { SectionHeading } from "@/components/ui/section-heading";
 export const metadata: Metadata = {
   title: "Pricing",
   description:
-    "Transparent, scale-with-you pricing for TalentBridge. Start free for 14 days. No credit card.",
+    "Transparent, scale-with-you pricing for TalentDrobe. Start free for 14 days. No credit card.",
 };
 
 const comparison = [

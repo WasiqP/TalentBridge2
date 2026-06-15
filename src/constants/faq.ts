@@ -3,15 +3,15 @@ import type { FaqItem } from "@/types";
 export const faqItems: FaqItem[] = [
   {
     id: "how-it-works",
-    question: "How does TalentBridge actually work?",
+    question: "How does TalentDrobe actually work?",
     answer:
-      "TalentBridge is a multi-agent system that pairs with your ATS. Once you describe a role, agents source from LinkedIn, GitHub, and the open web, score candidates against your rubric, and draft personalized outreach. You stay in the loop — every decision is explainable.",
+      "TalentDrobe is a multi-agent system that pairs with your ATS. Once you describe a role, agents source from LinkedIn, GitHub, and the open web, score candidates against your rubric, and draft personalized outreach. You stay in the loop — every decision is explainable.",
   },
   {
     id: "ats",
     question: "Do I have to replace my ATS?",
     answer:
-      "No. TalentBridge is designed to sit on top of Greenhouse, Lever, Workday, and Ashby with two-way sync. Your team keeps its current workflow — we just remove the manual grind.",
+      "No. TalentDrobe is designed to sit on top of Greenhouse, Lever, Workday, and Ashby with two-way sync. Your team keeps its current workflow — we just remove the manual grind.",
   },
   {
     id: "data",

@@ -4,7 +4,7 @@ import { HiringAgencyDashboardShell } from "@/components/dashboard/hiring-agency
 
 export const metadata: Metadata = {
   title: "Recruiter dashboard",
-  description: "Your TalentBridge hiring agency workspace.",
+  description: "Your TalentDrobe hiring agency workspace.",
   robots: { index: false, follow: false },
 };
 

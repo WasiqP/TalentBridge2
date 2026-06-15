@@ -5,7 +5,7 @@ import { JobSeekerSettingsPage } from "@/components/dashboard/job-seeker-setting
 export const metadata: Metadata = {
   title: "Settings",
   description:
-    "Manage your TalentBridge account, notifications, and job seeker preferences.",
+    "Manage your TalentDrobe account, notifications, and job seeker preferences.",
 };
 
 export default function Page() {

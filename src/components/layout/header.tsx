@@ -64,14 +64,11 @@ export function Header() {
               })}
             </nav>
             <div className="hidden items-center gap-2 md:flex">
-              <Button variant="ghost" size="sm" href="/sign-in" asChild>
-                Sign in
-              </Button>
               <Button variant="outline" size="sm" href="/sign-up" asChild>
                 Sign up
               </Button>
-              <Button size="sm" variant="lime" href="/contact" asChild>
-                Book a demo
+              <Button size="sm" variant="lime" href="/sign-in" asChild>
+                Sign in
               </Button>
             </div>
             <button
@@ -100,11 +97,11 @@ export function Header() {
               </Link>
             ))}
             <div className="mt-2 grid grid-cols-2 gap-2 pt-2">
-              <Button variant="outline" href="/sign-in" asChild>
-                Sign in
-              </Button>
-              <Button variant="lime" href="/sign-up" asChild>
+              <Button variant="outline" href="/sign-up" asChild>
                 Sign up
+              </Button>
+              <Button variant="lime" href="/sign-in" asChild>
+                Sign in
               </Button>
             </div>
           </Container>

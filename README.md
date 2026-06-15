@@ -1,6 +1,6 @@
-# TalentBridge
+# TalentDrobe
 
-Next.js application for TalentBridge — marketing site, authentication, and job seeker dashboard.
+Next.js application for TalentDrobe — marketing site, authentication, and job seeker dashboard.
 
 ## Documentation
 

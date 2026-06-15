@@ -5,7 +5,7 @@ import { SignInForm } from "@/components/forms/sign-in-form";
 
 export const metadata: Metadata = {
   title: "Sign in",
-  description: "Sign in to your TalentBridge account.",
+  description: "Sign in to your TalentDrobe account.",
   robots: { index: false, follow: false },
 };
 

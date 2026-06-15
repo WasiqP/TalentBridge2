@@ -17,7 +17,7 @@ export function Logo({ className, href = "/", light = false }: LogoProps) {
         light ? "text-paper-50" : "text-ink-950",
         className,
       )}
-      aria-label="TalentBridge home"
+      aria-label="TalentDrobe home"
     >
       <span className="relative inline-flex h-8 w-8 items-center justify-center overflow-hidden rounded-xl bg-ink-950">
         <span className="absolute inset-0 bg-gradient-to-br from-accent-lime via-accent-cyan to-accent-violet opacity-90" />
@@ -36,7 +36,7 @@ export function Logo({ className, href = "/", light = false }: LogoProps) {
           />
         </svg>
       </span>
-      <span className="text-[15px]">TalentBridge</span>
+      <span className="text-[15px]">TalentDrobe</span>
     </Link>
   );
 }

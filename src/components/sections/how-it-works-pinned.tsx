@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type MutableRefObject, type RefObject } from "react";
 import { ChevronDown } from "lucide-react";
 
 import { Container } from "@/components/ui/container";
@@ -14,7 +14,7 @@ const steps = [
     n: "01",
     title: "Describe the role",
     description:
-      "Drop a job description or write a one-line brief. TalentBridge builds a structured rubric you can edit and reuse.",
+      "Drop a job description or write a one-line brief. TalentDrobe builds a structured rubric you can edit and reuse.",
     previewLabel: "Rubric builder",
   },
   {
@@ -61,7 +61,7 @@ function getStepIndex(progress: number) {
   );
 }
 
-export function HowItWorksPinned() {
+export function HowItWorksPinned({ cascade = false }: { cascade?: boolean }) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const pinRef = useRef<HTMLDivElement>(null);
   const progressFillRef = useRef<HTMLDivElement>(null);
@@ -254,12 +254,72 @@ export function HowItWorksPinned() {
   }, []);
 
   return (
-    <section className="relative bg-paper-50 py-4 sm:py-6">
-      <Container size="full">
+    <section
+      className={cn(
+        "relative bg-ink-950 text-paper-50",
+        cascade
+          ? "z-10 w-full rounded-t-[28px] shadow-[0_-48px_120px_-32px_rgba(8,8,12,0.55)] sm:rounded-t-[36px]"
+          : "bg-paper-50 py-4 sm:py-6",
+      )}
+    >
+      {cascade ? (
         <div
           ref={sectionRef}
-          className="relative isolate overflow-hidden rounded-[28px] bg-ink-950 text-paper-50 sm:rounded-[36px]"
+          className="relative isolate w-full overflow-hidden"
         >
+          <SectionBody
+            pinRef={pinRef}
+            progressFillRef={progressFillRef}
+            progressGlowRef={progressGlowRef}
+            stepRefs={stepRefs}
+            previewRefs={previewRefs}
+            dotRefs={dotRefs}
+            counterRef={counterRef}
+          />
+        </div>
+      ) : (
+        <Container size="full">
+          <div
+            ref={sectionRef}
+            className="relative isolate overflow-hidden rounded-[28px] bg-ink-950 text-paper-50 sm:rounded-[36px]"
+          >
+            <SectionBody
+              pinRef={pinRef}
+              progressFillRef={progressFillRef}
+              progressGlowRef={progressGlowRef}
+              stepRefs={stepRefs}
+              previewRefs={previewRefs}
+              dotRefs={dotRefs}
+              counterRef={counterRef}
+            />
+          </div>
+        </Container>
+      )}
+    </section>
+  );
+}
+
+type SectionBodyProps = {
+  pinRef: RefObject<HTMLDivElement | null>;
+  progressFillRef: RefObject<HTMLDivElement | null>;
+  progressGlowRef: RefObject<HTMLDivElement | null>;
+  stepRefs: MutableRefObject<(HTMLLIElement | null)[]>;
+  previewRefs: MutableRefObject<(HTMLDivElement | null)[]>;
+  dotRefs: MutableRefObject<(HTMLSpanElement | null)[]>;
+  counterRef: RefObject<HTMLSpanElement | null>;
+};
+
+function SectionBody({
+  pinRef,
+  progressFillRef,
+  progressGlowRef,
+  stepRefs,
+  previewRefs,
+  dotRefs,
+  counterRef,
+}: SectionBodyProps) {
+  return (
+    <>
           <div className="absolute inset-0 bg-grid opacity-45" aria-hidden />
           <div
             aria-hidden
@@ -271,7 +331,7 @@ export function HowItWorksPinned() {
           />
 
           <div ref={pinRef} className="relative flex min-h-[100svh] flex-col">
-            <div className="border-b border-paper-50/8 px-5 py-10 sm:px-10 sm:py-12 lg:px-14">
+            <div className="border-b border-paper-50/8 px-5 py-10 sm:px-10 sm:py-12 lg:px-14 xl:px-16">
               <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
                 <div className="max-w-2xl">
                   <span className="inline-flex items-center gap-2 rounded-full border border-paper-50/12 bg-paper-50/[0.04] px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-paper-100/70">
@@ -311,7 +371,7 @@ export function HowItWorksPinned() {
               </div>
             </div>
 
-            <div className="grid flex-1 gap-10 px-5 py-10 sm:px-10 sm:py-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-14 lg:px-14 lg:py-14">
+            <div className="grid flex-1 gap-10 px-5 py-10 sm:px-10 sm:py-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-14 lg:px-14 lg:py-14 xl:px-16">
               <div className="relative">
                 <div
                   aria-hidden
@@ -395,7 +455,7 @@ export function HowItWorksPinned() {
                       </span>
                     </div>
                     <span className="font-mono text-[10px] text-paper-100/40">
-                      talentbridge.app
+                      talentdrobe.app
                     </span>
                   </div>
 
@@ -435,9 +495,7 @@ export function HowItWorksPinned() {
               <ChevronDown className="h-3.5 w-3.5 animate-bounce" />
             </div>
           </div>
-        </div>
-      </Container>
-    </section>
+    </>
   );
 }
 

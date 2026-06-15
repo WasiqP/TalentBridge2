@@ -96,7 +96,7 @@ export function Footer() {
           aria-hidden
           className="pointer-events-none mt-16 flex items-center justify-center text-[20vw] font-serif italic leading-none text-paper-50/[0.035] sm:text-[18vw]"
         >
-          TalentBridge
+          TalentDrobe
         </div>
       </Container>
     </footer>

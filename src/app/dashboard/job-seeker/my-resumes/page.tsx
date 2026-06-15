@@ -5,7 +5,7 @@ import { JobSeekerMyResumesPage } from "@/components/dashboard/job-seeker-my-res
 export const metadata: Metadata = {
   title: "My resumes",
   description:
-    "View, edit, and save your resumes on TalentBridge.",
+    "View, edit, and save your resumes on TalentDrobe.",
 };
 
 export default function Page() {

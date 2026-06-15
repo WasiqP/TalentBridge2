@@ -24,6 +24,8 @@ type DashboardExtractionPanelProps = {
   ariaLabel?: string;
   /** When true, all steps finished — show success state (no spinners). */
   isComplete?: boolean;
+  /** Shown when the backend call fails. */
+  errorMessage?: string | null;
 };
 
 export function DashboardExtractionPanel({
@@ -36,11 +38,14 @@ export function DashboardExtractionPanel({
   fileHint = "Parsing sections and generating structured data",
   ariaLabel = "Resume extraction progress",
   isComplete = false,
+  errorMessage,
 }: DashboardExtractionPanelProps) {
   const isStandalone = variant === "standalone";
-  const headingText = isComplete
-    ? "Resume extracted successfully"
-    : heading;
+  const headingText = errorMessage
+    ? "We could not finish parsing"
+    : isComplete
+      ? "Resume extracted successfully"
+      : heading;
   const fileHintText = isComplete
     ? "Opening your profile…"
     : fileHint;
@@ -115,7 +120,19 @@ export function DashboardExtractionPanel({
         </div>
 
         <AnimatePresence>
-          {isComplete ? (
+          {errorMessage ? (
+            <motion.p
+              key="error"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+              className="mt-3 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-[13px] font-medium text-red-700 sm:text-[14px]"
+              role="alert"
+            >
+              {errorMessage}
+            </motion.p>
+          ) : isComplete ? (
             <motion.p
               key="success"
               initial={{ opacity: 0, y: 8 }}

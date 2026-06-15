@@ -23,7 +23,7 @@ export default function BlogPage() {
         eyebrow="Blog"
         title="Playbooks. Field notes."
         italic="Quiet conviction."
-        description="Long-form thinking from the recruiters and engineers building TalentBridge — and the customers using it every day."
+        description="Long-form thinking from the recruiters and engineers building TalentDrobe — and the customers using it every day."
       />
 
       <section className="bg-paper-50 py-20 sm:py-28">

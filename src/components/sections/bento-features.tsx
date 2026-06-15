@@ -42,7 +42,7 @@ export function BentoFeatures() {
                 </span>
               </>
             }
-            description="From sourcing to scheduling, TalentBridge handles the grind so your team can focus on the human work that wins hires."
+            description="From sourcing to scheduling, TalentDrobe handles the grind so your team can focus on the human work that wins hires."
             centered
           />
         </FadeUp>

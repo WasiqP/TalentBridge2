@@ -4,7 +4,7 @@ import { JobSeekerDashboardShell } from "@/components/dashboard/job-seeker-dashb
 
 export const metadata: Metadata = {
   title: "Dashboard",
-  description: "Your TalentBridge job seeker workspace.",
+  description: "Your TalentDrobe job seeker workspace.",
   robots: { index: false, follow: false },
 };
 

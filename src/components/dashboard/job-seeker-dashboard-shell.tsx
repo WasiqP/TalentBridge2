@@ -21,10 +21,10 @@ import {
   DashboardChatPanel,
 } from "@/components/dashboard/dashboard-chat-panel";
 import { DashboardContentPanel } from "@/components/dashboard/dashboard-content-panel";
-import {
-  DashboardExtractionPanel,
+import { DashboardExtractionPanel,
   type ExtractionStep,
 } from "@/components/dashboard/dashboard-extraction-panel";
+import { DashboardProfileBuildCanvas } from "@/components/dashboard/dashboard-profile-build-canvas";
 import { DashboardBackButton } from "@/components/dashboard/dashboard-back-button";
 import {
   DashboardFloatingChat,
@@ -35,6 +35,18 @@ import { DashboardResumeDropzone } from "@/components/dashboard/dashboard-resume
 import { DashboardScreenTransition } from "@/components/dashboard/dashboard-screen-transition";
 import { ProfileReveal } from "@/components/dashboard/profile/profile-reveal";
 import { DashboardTopActions } from "@/components/dashboard/dashboard-top-actions";
+import {
+  fetchCvSuggestions,
+  uploadCvFile,
+} from "@/lib/api/hr-backend-api";
+import {
+  clearHrBackendSession,
+  saveCvSuggestionsToSession,
+  saveParsedProfileToSession,
+} from "@/lib/api/hr-backend-session";
+import { mapCandidateProfileToJobSeekerProfile } from "@/lib/api/map-candidate-profile-to-ui";
+import type { JobSeekerProfile } from "@/config/job-seeker-profile";
+import type { ApiCvSuggestion } from "@/types/hr-backend";
 // import { StaggeredMenu } from "@/components/ui/staggered-menu";
 // import { jobSeekerMenuItems } from "@/config/job-seeker-menu";
 import { cn } from "@/lib/utils";
@@ -51,8 +63,6 @@ const initialSteps: ExtractionStep[] = [
   { id: "s3", title: "Creating your profile draft", status: "pending" },
   { id: "s4", title: "Suggesting improvements", status: "pending" },
 ];
-
-const EXTRACTION_TO_PROFILE_MS = 5200;
 
 const UPLOAD_WELCOME: ChatMessage = {
   id: "upload-welcome",
@@ -75,6 +85,11 @@ export function JobSeekerDashboardShell({
   const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [steps, setSteps] = useState<ExtractionStep[]>(initialSteps);
   const [extractionReady, setExtractionReady] = useState(false);
+  const [extractionError, setExtractionError] = useState<string | null>(null);
+  const [parsedUiProfile, setParsedUiProfile] = useState<JobSeekerProfile | null>(
+    null,
+  );
+  const [apiSuggestions, setApiSuggestions] = useState<ApiCvSuggestion[]>([]);
   const [uploadChatOpen, setUploadChatOpen] = useState(false);
   const [uploadMessages, setUploadMessages] = useState<ChatMessage[]>([]);
   const resumeFileUrlRef = useRef<string | null>(null);
@@ -133,6 +148,9 @@ export function JobSeekerDashboardShell({
     setResumeFile(file);
     resetUploadChat();
     setExtractionReady(false);
+    setExtractionError(null);
+    setParsedUiProfile(null);
+    setApiSuggestions([]);
     extractionAnimatedRef.current = false;
     setDirection(1);
     setPhase("extracting");
@@ -156,7 +174,11 @@ export function JobSeekerDashboardShell({
       setDirection(-1);
       extractionAnimatedRef.current = false;
       setExtractionReady(false);
+      setExtractionError(null);
       setSteps(initialSteps);
+      setParsedUiProfile(null);
+      setApiSuggestions([]);
+      clearHrBackendSession();
       resetUploadChat();
       setPhase("upload");
       return;
@@ -166,6 +188,7 @@ export function JobSeekerDashboardShell({
       setDirection(-1);
       extractionAnimatedRef.current = false;
       setExtractionReady(false);
+      setExtractionError(null);
       setPhase("upload");
     }
   }
@@ -181,86 +204,130 @@ export function JobSeekerDashboardShell({
     };
   }, []);
 
+  // While the upload API is still working, gently advance the UI so the build canvas feels alive.
+  useEffect(() => {
+    if (phase !== "extracting" || parsedUiProfile || extractionError) return;
+
+    const timer = window.setTimeout(() => {
+      setSteps((prev) => {
+        const isStillReading = prev.some(
+          (step) => step.id === "s1" && step.status === "running",
+        );
+        if (!isStillReading) return prev;
+
+        return prev.map((step) =>
+          step.id === "s2" && step.status === "pending"
+            ? { ...step, status: "running" }
+            : step,
+        );
+      });
+    }, 2200);
+
+    return () => window.clearTimeout(timer);
+  }, [phase, parsedUiProfile, extractionError]);
+
   useEffect(() => {
     if (phase !== "extracting" || !resumeFile) return;
     if (extractionAnimatedRef.current) return;
 
     extractionAnimatedRef.current = true;
-    setExtractionReady(false);
-    setSteps([
-      { id: "s1", title: "Reading your resume", status: "running" },
-      { id: "s2", title: "Extracting experience & skills", status: "pending" },
-      { id: "s3", title: "Creating your profile draft", status: "pending" },
-      { id: "s4", title: "Suggesting improvements", status: "pending" },
-    ]);
+    let cancelled = false;
 
-    const timers: Array<ReturnType<typeof setTimeout>> = [];
+    async function runCvParsingFlow() {
+      setExtractionError(null);
+      setExtractionReady(false);
+      setSteps([
+        { id: "s1", title: "Reading your resume", status: "running" },
+        { id: "s2", title: "Extracting experience & skills", status: "pending" },
+        { id: "s3", title: "Creating your profile draft", status: "pending" },
+        { id: "s4", title: "Suggesting improvements", status: "pending" },
+      ]);
 
-    timers.push(
-      setTimeout(() => {
+      try {
+        // 1) Send the file to POST /upload_cv
+        const uploadResult = await uploadCvFile(resumeFile!);
+        if (cancelled) return;
+
+        if (!uploadResult.parsedProfile) {
+          throw new Error("The API did not return profile data for this file.");
+        }
+
+        saveParsedProfileToSession(uploadResult.parsedProfile);
+
+        const uiProfile = mapCandidateProfileToJobSeekerProfile(
+          uploadResult.parsedProfile,
+          {
+            uploadStatus: uploadResult.uploadStatus,
+            missingRequiredFields: uploadResult.missingRequiredFields,
+          },
+        );
+        setParsedUiProfile(uiProfile);
+
         setSteps((prev) =>
-          prev.map((s) =>
-            s.id === "s1"
-              ? { ...s, status: "done" }
-              : s.id === "s2"
-                ? { ...s, status: "running" }
-                : s,
+          prev.map((step) =>
+            step.id === "s1"
+              ? { ...step, status: "done" }
+              : step.id === "s2"
+                ? { ...step, status: "done" }
+                : step.id === "s3"
+                  ? { ...step, status: "running" }
+                  : step,
           ),
         );
-      }, 900),
-    );
 
-    timers.push(
-      setTimeout(() => {
+        // 2) Send parsed profile to POST /suggestions
         setSteps((prev) =>
-          prev.map((s) =>
-            s.id === "s2"
-              ? { ...s, status: "done" }
-              : s.id === "s3"
-                ? { ...s, status: "running" }
-                : s,
+          prev.map((step) =>
+            step.id === "s3"
+              ? { ...step, status: "done" }
+              : step.id === "s4"
+                ? { ...step, status: "running" }
+                : step,
           ),
         );
-      }, 1900),
-    );
 
-    timers.push(
-      setTimeout(() => {
-        setSteps((prev) =>
-          prev.map((s) =>
-            s.id === "s3"
-              ? { ...s, status: "done" }
-              : s.id === "s4"
-                ? { ...s, status: "running" }
-                : s,
-          ),
+        const suggestions = await fetchCvSuggestions(uploadResult.parsedProfile);
+        if (cancelled) return;
+
+        saveCvSuggestionsToSession(suggestions);
+        setApiSuggestions(suggestions);
+
+        setParsedUiProfile(
+          mapCandidateProfileToJobSeekerProfile(uploadResult.parsedProfile, {
+            uploadStatus: uploadResult.uploadStatus,
+            missingRequiredFields: uploadResult.missingRequiredFields,
+            apiSuggestions: suggestions,
+          }),
         );
-      }, 3100),
-    );
 
-    timers.push(
-      setTimeout(() => {
-        setSteps((prev) =>
-          prev.map((s) => (s.id === "s4" ? { ...s, status: "done" } : s)),
-        );
-      }, 4300),
-    );
-
-    timers.push(
-      setTimeout(() => {
+        setSteps((prev) => prev.map((step) => ({ ...step, status: "done" })));
         setExtractionReady(true);
-      }, 4300),
-    );
 
-    timers.push(
-      setTimeout(() => {
-        setDirection(1);
-        setPhase("complete");
-      }, EXTRACTION_TO_PROFILE_MS),
-    );
+        // Small pause so the success state is visible before profile reveal.
+        window.setTimeout(() => {
+          if (!cancelled) {
+            setDirection(1);
+            setPhase("complete");
+          }
+        }, 700);
+      } catch (error) {
+        if (cancelled) return;
+
+        const message =
+          error instanceof Error
+            ? error.message
+            : "Something went wrong while parsing your CV.";
+
+        setExtractionError(message);
+        setExtractionReady(false);
+        extractionAnimatedRef.current = false;
+      }
+    }
+
+    runCvParsingFlow();
 
     return () => {
-      timers.forEach(clearTimeout);
+      cancelled = true;
     };
   }, [phase, resumeFile]);
 
@@ -369,18 +436,39 @@ export function JobSeekerDashboardShell({
             </DashboardScreenTransition>
           ) : phase === "extracting" ? (
             <DashboardScreenTransition key={screenKey} direction={direction}>
-              <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col justify-center px-4 pt-24 pb-8 sm:px-6">
+              <div className="mx-auto flex w-full max-w-[96rem] flex-1 flex-col gap-5 px-4 pt-24 pb-8 sm:px-6 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(300px,360px)] lg:items-start lg:gap-6 xl:gap-8">
+                <DashboardProfileBuildCanvas
+                  steps={steps}
+                  profile={parsedUiProfile}
+                  isComplete={extractionReady}
+                  errorMessage={extractionError}
+                  className="min-h-[min(520px,62vh)] lg:min-h-[min(680px,78vh)]"
+                />
                 <DashboardExtractionPanel
                   variant="standalone"
                   fileName={fileName}
                   steps={steps}
                   isComplete={extractionReady}
+                  errorMessage={extractionError}
+                  className="lg:sticky lg:top-24"
                 />
               </div>
             </DashboardScreenTransition>
           ) : (
             <DashboardScreenTransition key={screenKey} direction={direction}>
-              <ProfileReveal fileName={fileName} />
+              {parsedUiProfile ? (
+                <ProfileReveal
+                  fileName={fileName}
+                  profile={parsedUiProfile}
+                  apiSuggestions={apiSuggestions}
+                />
+              ) : (
+                <div className="mx-auto flex w-full max-w-3xl flex-col items-center justify-center px-4 pt-32 pb-16 text-center sm:px-6">
+                  <p className="text-[15px] font-medium text-ink-800">
+                    Preparing your profile…
+                  </p>
+                </div>
+              )}
             </DashboardScreenTransition>
           )}
         </AnimatePresence>

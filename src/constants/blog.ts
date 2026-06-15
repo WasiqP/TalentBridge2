@@ -7,7 +7,7 @@ export const blogPosts: BlogPost[] = [
     excerpt:
       "How leading talent orgs are restructuring around recruiter copilots — and what to copy this quarter.",
     content:
-      "AI recruiting is no longer a curiosity. The teams that moved first now hire 3.2x faster than their peers, and the gap is widening every quarter. This playbook walks through the four phases of adoption we see at TalentBridge: copilot trial, sourcing automation, pipeline intelligence, and full multi-agent rollout. We'll cover the rubric design, change-management traps, and the specific metrics to instrument before week one.",
+      "AI recruiting is no longer a curiosity. The teams that moved first now hire 3.2x faster than their peers, and the gap is widening every quarter. This playbook walks through the four phases of adoption we see at TalentDrobe: copilot trial, sourcing automation, pipeline intelligence, and full multi-agent rollout. We'll cover the rubric design, change-management traps, and the specific metrics to instrument before week one.",
     date: "May 12, 2026",
     author: "Ariana Malik",
     authorRole: "Head of Research",
@@ -20,7 +20,7 @@ export const blogPosts: BlogPost[] = [
     excerpt:
       "Why opaque AI scoring fails the moment your legal team asks 'show me why' — and how to design around it.",
     content:
-      "When a recruiter or candidate asks why a score exists, your AI needs an answer. Black-box ranking systems collapse under that pressure — they create legal risk, erode trust, and make calibration impossible. In this post we walk through how TalentBridge generates structured pros/cons/gaps for every candidate, and the engineering decisions behind making explainability the default rather than an afterthought.",
+      "When a recruiter or candidate asks why a score exists, your AI needs an answer. Black-box ranking systems collapse under that pressure — they create legal risk, erode trust, and make calibration impossible. In this post we walk through how TalentDrobe generates structured pros/cons/gaps for every candidate, and the engineering decisions behind making explainability the default rather than an afterthought.",
     date: "April 30, 2026",
     author: "Naomi Rahman",
     authorRole: "Principal Engineer",

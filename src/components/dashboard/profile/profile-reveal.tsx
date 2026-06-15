@@ -36,6 +36,7 @@ import {
 } from "@/config/job-seeker-profile";
 import { JOB_SEEKER_SEARCH_PATH } from "@/config/dashboard-routes";
 import { jobSeekerSearchResults } from "@/config/job-seeker-search";
+import type { ApiCvSuggestion } from "@/types/hr-backend";
 import { cn } from "@/lib/utils";
 
 /** Static match scores for the preview teaser — replace with API scores. */
@@ -496,9 +497,14 @@ export function ProfileMainSections({ profile }: { profile: JobSeekerProfile }) 
   );
 }
 
-/** Match preview bridge — connects the profile to job search. */
-export function ProfileMatchPreview() {
+/** AI suggestions from POST /suggestions — shown after profile is built. */
+export function ProfileMatchPreview({
+  apiSuggestions = [],
+}: {
+  apiSuggestions?: ApiCvSuggestion[];
+}) {
   const previewMatches = jobSeekerSearchResults.slice(0, 3);
+  const topSuggestions = apiSuggestions.slice(0, 3);
 
   return (
     <motion.section
@@ -515,10 +521,14 @@ export function ProfileMatchPreview() {
           </span>
           <div>
             <h2 className="text-[16px] font-semibold tracking-tight text-ink-950 sm:text-[18px]">
-              {jobSeekerSearchResults.length} roles already match your profile
+              {topSuggestions.length > 0
+                ? "AI suggestions for your next move"
+                : `${jobSeekerSearchResults.length} roles already match your profile`}
             </h2>
             <p className="mt-0.5 text-[13px] text-ink-500">
-              Based on your experience, skills, and location.
+              {topSuggestions.length > 0
+                ? "Personalized guidance from your parsed CV."
+                : "Based on your experience, skills, and location."}
             </p>
           </div>
         </div>
@@ -531,27 +541,53 @@ export function ProfileMatchPreview() {
       </div>
 
       <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
-        {previewMatches.map((job, index) => (
-          <div
-            key={job.id}
-            className="rounded-2xl border border-ink-900/10 bg-paper-50 p-4 transition hover:border-ink-900/20 hover:shadow-[0_4px_24px_rgba(8,8,12,0.06)]"
-          >
-            <div className="flex items-center justify-between gap-2">
-              <span className="inline-flex items-center gap-1 rounded-full border border-accent-lime/35 bg-accent-lime/15 px-2 py-0.5 text-[11px] font-semibold text-ink-900">
-                {PREVIEW_MATCH_PERCENT[index] ?? 85}% match
-              </span>
-              <span className="text-[11px] font-medium text-ink-400">
-                {job.salaryRange}
-              </span>
-            </div>
-            <p className="mt-2.5 truncate text-[14px] font-semibold tracking-tight text-ink-950">
-              {job.jobTitle}
-            </p>
-            <p className="mt-0.5 truncate text-[12.5px] text-ink-500">
-              {job.companyName} · {job.location}
-            </p>
-          </div>
-        ))}
+        {topSuggestions.length > 0
+          ? topSuggestions.map((item, index) => (
+              <div
+                key={`${item.category}-${index}`}
+                className="rounded-2xl border border-ink-900/10 bg-paper-50 p-4 transition hover:border-ink-900/20 hover:shadow-[0_4px_24px_rgba(8,8,12,0.06)]"
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <span
+                    className={cn(
+                      "inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-semibold capitalize",
+                      item.priority === "high"
+                        ? "border-accent-lime/35 bg-accent-lime/15 text-ink-900"
+                        : "border-ink-900/10 bg-paper-100 text-ink-700",
+                    )}
+                  >
+                    {item.priority} priority
+                  </span>
+                  <span className="text-[11px] font-medium text-ink-400">
+                    {item.category}
+                  </span>
+                </div>
+                <p className="mt-2.5 text-[13.5px] leading-relaxed text-ink-800">
+                  {item.suggestion}
+                </p>
+              </div>
+            ))
+          : previewMatches.map((job, index) => (
+              <div
+                key={job.id}
+                className="rounded-2xl border border-ink-900/10 bg-paper-50 p-4 transition hover:border-ink-900/20 hover:shadow-[0_4px_24px_rgba(8,8,12,0.06)]"
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <span className="inline-flex items-center gap-1 rounded-full border border-accent-lime/35 bg-accent-lime/15 px-2 py-0.5 text-[11px] font-semibold text-ink-900">
+                    {PREVIEW_MATCH_PERCENT[index] ?? 85}% match
+                  </span>
+                  <span className="text-[11px] font-medium text-ink-400">
+                    {job.salaryRange}
+                  </span>
+                </div>
+                <p className="mt-2.5 truncate text-[14px] font-semibold tracking-tight text-ink-950">
+                  {job.jobTitle}
+                </p>
+                <p className="mt-0.5 truncate text-[12.5px] text-ink-500">
+                  {job.companyName} · {job.location}
+                </p>
+              </div>
+            ))}
       </div>
     </motion.section>
   );
@@ -561,12 +597,14 @@ type ProfileRevealProps = {
   fileName?: string;
   profile?: JobSeekerProfile;
   className?: string;
+  apiSuggestions?: ApiCvSuggestion[];
 };
 
 export function ProfileReveal({
   fileName,
   profile = jobSeekerProfile,
   className,
+  apiSuggestions = [],
 }: ProfileRevealProps) {
   const firstName = getProfileFirstName(profile.name);
 
@@ -648,7 +686,7 @@ export function ProfileReveal({
 
         {/* Match preview bridge — connects the profile to job search */}
         <div className="mt-5 sm:mt-6">
-          <ProfileMatchPreview />
+          <ProfileMatchPreview apiSuggestions={apiSuggestions} />
         </div>
       </div>
     </div>

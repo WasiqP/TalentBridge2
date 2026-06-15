@@ -1,5 +1,5 @@
 /**
- * Content for the job-seeker guest landing page (`/guest-page`).
+ * Content for the job seeker marketing home page (`/`).
  * Kept separate from recruiter-facing marketing data.
  */
 
@@ -137,6 +137,70 @@ export type JourneyStep = {
   tag: string;
 };
 
+export type ProductStep = {
+  n: string;
+  title: string;
+  description: string;
+  tag: string;
+  preview: "upload" | "profile" | "match";
+};
+
+/** Three-step product journey for the guest landing page (post-hero). */
+export const productSteps: ProductStep[] = [
+  {
+    n: "01",
+    title: "Drop your CV",
+    description:
+      "Upload PDF, DOC, or DOCX once. The same parser your dashboard uses extracts skills, experience, and education.",
+    tag: "Real API",
+    preview: "upload",
+  },
+  {
+    n: "02",
+    title: "Profile assembles live",
+    description:
+      "Watch identity, experience, and skills lock into place — the same build canvas you saw in the hero.",
+    tag: "~10 seconds",
+    preview: "profile",
+  },
+  {
+    n: "03",
+    title: "Roles ranked for you",
+    description:
+      "Every match shows a score and a plain-English reason. No keyword roulette.",
+    tag: "Explainable",
+    preview: "match",
+  },
+];
+
+export type ComparisonRow = {
+  jobBoards: string;
+  talentDrobe: string;
+};
+
+export const guestComparisonRows: ComparisonRow[] = [
+  {
+    jobBoards: "Upload the same PDF on every application",
+    talentDrobe: "One upload → a living profile you reuse",
+  },
+  {
+    jobBoards: "Keyword guessing and endless scrolling",
+    talentDrobe: "Ranked matches with a clear reason why",
+  },
+  {
+    jobBoards: "Black-box applications — no feedback",
+    talentDrobe: "Parse confidence + AI tips to improve",
+  },
+  {
+    jobBoards: "Long forms repeated for every role",
+    talentDrobe: "Zero long forms to get started",
+  },
+  {
+    jobBoards: "Generic job alerts that don't fit",
+    talentDrobe: "Matches scored against your real profile",
+  },
+];
+
 export const journeySteps: JourneyStep[] = [
   {
     n: "01",
@@ -165,6 +229,50 @@ export const journeySteps: JourneyStep[] = [
     description:
       "The agent tailors your résumé per role and applies — you just approve.",
     tag: "Minimal clicks",
+  },
+];
+
+export type GuestHowItWorksStep = {
+  n: string;
+  title: string;
+  description: string;
+  tag: string;
+  previewLabel: string;
+};
+
+/** Scroll-pinned how-it-works steps on the guest landing page. */
+export const guestHowItWorksSteps: GuestHowItWorksStep[] = [
+  {
+    n: "01",
+    title: "Drop your résumé",
+    description:
+      "One file. No 12-field signup form. We parse it into a structured profile in seconds.",
+    tag: "~10 seconds",
+    previewLabel: "CV upload",
+  },
+  {
+    n: "02",
+    title: "Meet your agent",
+    description:
+      "Your AI career agent reads your background and talks through where you fit best.",
+    tag: "1 conversation",
+    previewLabel: "Career agent",
+  },
+  {
+    n: "03",
+    title: "See ranked matches",
+    description:
+      "A live feed of roles, each with a match score and the exact reason it fits you.",
+    tag: "Explainable",
+    previewLabel: "Ranked roles",
+  },
+  {
+    n: "04",
+    title: "Apply in one click",
+    description:
+      "The agent tailors your résumé per role and applies — you just approve.",
+    tag: "Minimal clicks",
+    previewLabel: "One-click apply",
   },
 ];
 

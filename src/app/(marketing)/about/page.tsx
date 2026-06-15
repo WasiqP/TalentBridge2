@@ -20,7 +20,7 @@ export default function AboutPage() {
         eyebrow="About"
         title="We're building the copilot"
         italic="we wished we had for fifteen years."
-        description="TalentBridge is a small team of recruiters, engineers, and trust & safety leads who believe AI should make the work more human — not less."
+        description="TalentDrobe is a small team of recruiters, engineers, and trust & safety leads who believe AI should make the work more human — not less."
       />
 
       <section className="bg-paper-50 py-24 sm:py-32">
@@ -41,7 +41,7 @@ export default function AboutPage() {
                 The best recruiters we&apos;ve worked with were judgment machines.
                 The grind around the judgment — Boolean searches, copy-paste
                 outreach, slogging through resumes — wore them down. We built
-                TalentBridge so that grind disappears, and the judgment
+                TalentDrobe so that grind disappears, and the judgment
                 multiplies.
               </p>
             </FadeUp>
@@ -192,7 +192,7 @@ export default function AboutPage() {
               {
                 outlet: "TechCrunch",
                 title:
-                  "TalentBridge raises $48M to make recruiting feel human again",
+                  "TalentDrobe raises $48M to make recruiting feel human again",
                 date: "March 2026",
               },
               {
