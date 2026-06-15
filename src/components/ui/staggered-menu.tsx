@@ -375,7 +375,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
     animateIcon(target);
     animateColor(target);
     animateText(target);
-  }, [playOpen, playClose, animateIcon, animateColor, animateText]);
+  }, [playOpen, playClose, animateIcon, animateColor, animateText, onMenuOpen, onMenuClose]);
 
   const closeMenu = useCallback(() => {
     if (openRef.current) {
@@ -412,18 +412,22 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
   return (
     <div
       className={(className ? className + ' ' : '') + 'staggered-menu-wrapper' + (isFixed ? ' fixed-wrapper' : '')}
-      style={accentColor ? { ['--sm-accent' as any]: accentColor } : undefined}
+      style={
+        accentColor
+          ? ({ "--sm-accent": accentColor } as React.CSSProperties)
+          : undefined
+      }
       data-position={position}
       data-open={open || undefined}
     >
       <div ref={preLayersRef} className="sm-prelayers" aria-hidden="true">
         {(() => {
           const raw = colors && colors.length ? colors.slice(0, 4) : ['#1e1e22', '#35353c'];
-          let arr = [...raw];
-          if (arr.length >= 3) {
-            const mid = Math.floor(arr.length / 2);
-            arr.splice(mid, 1);
-          }
+          const mid = Math.floor(raw.length / 2);
+          const arr =
+            raw.length >= 3
+              ? [...raw.slice(0, mid), ...raw.slice(mid + 1)]
+              : [...raw];
           return arr.map((c, i) => <div key={i} className="sm-prelayer" style={{ background: c }} />);
         })()}
       </div>

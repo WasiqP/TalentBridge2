@@ -1,8 +1,3 @@
-import type {
-  CategoryFilter,
-  CompanySizeFilter,
-  WorkTypeFilter,
-} from "@/config/job-seeker-search-filters";
 import {
   enrichJobSearchResult,
   type JobSeekerSearchResultCore,
