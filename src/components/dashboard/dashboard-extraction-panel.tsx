@@ -42,7 +42,7 @@ export function DashboardExtractionPanel({
     ? "Resume extracted successfully"
     : heading;
   const fileHintText = isComplete
-    ? "Your profile data is ready — continue when you're ready."
+    ? "Opening your profile…"
     : fileHint;
 
   return (

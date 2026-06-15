@@ -9,6 +9,8 @@ type DashboardChatInputProps = {
   variant?: "fixed" | "inline";
   placeholder?: string;
   onSend?: (message: string) => void;
+  /** Fires when the user focuses the composer — use to expand into a split chat layout. */
+  onEngage?: () => void;
   className?: string;
   showDisclaimer?: boolean;
 };
@@ -17,6 +19,7 @@ export function DashboardChatInput({
   variant = "fixed",
   placeholder = "Ask anything about your job search…",
   onSend,
+  onEngage,
   className,
   showDisclaimer = true,
 }: DashboardChatInputProps) {
@@ -60,6 +63,7 @@ export function DashboardChatInput({
             rows={1}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
+            onFocus={() => onEngage?.()}
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();

@@ -25,7 +25,7 @@ const WELCOME_MESSAGE: ChatMessage = {
   content: `Hi ${getProfileFirstName(jobSeekerProfile.name)} — I'm your TalentBridge copilot. Ask me to refine your profile, suggest roles, or improve your resume bullets.`,
 };
 
-function getMockReply(message: string): string {
+export function getMockReply(message: string): string {
   const lower = message.toLowerCase();
 
   if (lower.includes("role") || lower.includes("job")) {
@@ -203,18 +203,33 @@ export function DashboardFloatingChat({ className }: DashboardFloatingChatProps)
           <motion.button
             key="chat-fab"
             type="button"
-            initial={{ opacity: 0, scale: 0.85, y: 12 }}
+            initial={{ opacity: 0, scale: 0.92, y: 8 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 8 }}
-            transition={{ duration: 0.28, ease: EASE }}
+            exit={{ opacity: 0, scale: 0.96, y: 6 }}
+            transition={{ duration: 0.24, ease: EASE }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             onClick={() => setOpen(true)}
-            className="pointer-events-auto absolute bottom-6 right-5 inline-flex h-14 w-14 items-center justify-center rounded-full bg-ink-950 text-paper-50 shadow-[0_8px_32px_rgba(8,8,12,0.28)] transition hover:bg-ink-800 hover:shadow-[0_12px_40px_rgba(8,8,12,0.32)] sm:bottom-7 sm:right-6"
-            aria-label="Open chat"
+            className={cn(
+              "pointer-events-auto absolute bottom-6 right-5 sm:bottom-7 sm:right-6",
+              "inline-flex h-14 max-w-[min(calc(100vw-2.5rem),280px)] items-center gap-3 overflow-hidden",
+              "rounded-full border border-ink-900/10 bg-ink-950 pl-3.5 pr-5 text-left text-paper-50",
+              "shadow-[0_8px_32px_rgba(8,8,12,0.28)] transition-colors hover:bg-ink-800",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-lime focus-visible:ring-offset-2",
+            )}
+            aria-label="Open AI copilot"
           >
-            <MessageCircle className="h-6 w-6" strokeWidth={2} aria-hidden />
-            <span className="absolute -right-0.5 -top-0.5 flex h-3.5 w-3.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent-lime opacity-60" />
-              <span className="relative inline-flex h-3.5 w-3.5 rounded-full bg-accent-lime" />
+            <span className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-paper-50/10">
+              <MessageCircle className="h-[18px] w-[18px]" strokeWidth={2} aria-hidden />
+              <span className="absolute -right-0.5 -top-0.5 flex h-3 w-3">
+                <span className="relative inline-flex h-3 w-3 rounded-full bg-accent-lime" />
+              </span>
+            </span>
+            <span className="min-w-0 truncate">
+              <span className="block text-[13px] font-medium leading-tight">Ask AI</span>
+              <span className="block truncate text-[12px] text-paper-100/55">
+                Message the copilot…
+              </span>
             </span>
           </motion.button>
         ) : null}
