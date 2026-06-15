@@ -112,8 +112,11 @@ function UploadScene() {
         <span className="flex h-14 w-14 items-center justify-center rounded-2xl border border-ink-900/8 bg-paper-50 text-accent-lime-dark shadow-sm">
           <UploadCloud className="h-7 w-7" aria-hidden />
         </span>
-        <p className="mt-4 text-[15px] font-medium text-ink-950">Drop your résumé</p>
-        <p className="mt-1 text-[12px] text-ink-500">PDF · DOC · DOCX</p>
+        <p className="mt-4 text-[15px] font-medium text-ink-950">Drop your resume here</p>
+        <p className="mt-2 max-w-[26ch] text-pretty text-[12px] leading-relaxed text-ink-500">
+          Drag and drop your file into this area, or click to browse from your device.
+        </p>
+        <p className="mt-3 text-[12px] text-ink-500">PDF · DOC · DOCX</p>
       </motion.div>
 
       <motion.div
@@ -126,9 +129,7 @@ function UploadScene() {
           <FileText className="h-5 w-5" aria-hidden />
         </span>
         <div className="min-w-0 flex-1 text-left">
-          <p className="truncate text-[13px] font-semibold text-ink-950">
-            jordan-avery-resume.pdf
-          </p>
+          <p className="truncate text-[13px] font-semibold text-ink-950">resume.pdf</p>
           <p className="text-[11px] text-ink-500">Uploading securely…</p>
         </div>
         <Loader2 className="h-4 w-4 animate-spin text-accent-lime-dark" aria-hidden />

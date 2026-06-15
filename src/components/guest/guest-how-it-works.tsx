@@ -350,14 +350,26 @@ function StepPreview({ index }: { index: number }) {
 
 function PreviewUpload() {
   return (
-    <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-accent-lime/35 bg-accent-lime/[0.04] p-8 text-center">
+    <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-accent-lime/35 bg-accent-lime/[0.04] px-6 py-8 text-center">
       <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-paper-50/10 bg-paper-50/[0.04] text-accent-lime">
         <UploadCloud className="h-6 w-6" aria-hidden />
       </div>
-      <p className="mt-4 text-sm font-medium text-paper-50">jordan-avery-resume.pdf</p>
-      <p className="mt-1 font-mono text-[11px] text-paper-100/50">Parsing via TalentDrobe API</p>
-      <p className="mt-4 font-mono text-[11px] text-accent-lime">
-        → profile fields extracted · 96% confidence
+      <p className="mt-4 text-sm font-medium text-paper-50">Drop your resume here</p>
+      <p className="mt-2 max-w-[28ch] text-pretty text-[12px] leading-relaxed text-paper-100/55">
+        Drag and drop your file into this area, or click to browse from your device.
+      </p>
+      <ul className="mt-4 flex flex-wrap items-center justify-center gap-2" aria-label="Supported file types">
+        {["PDF", "DOCX", "DOC"].map((format) => (
+          <li
+            key={format}
+            className="rounded-full border border-paper-50/10 bg-paper-50/[0.04] px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-[0.12em] text-paper-100/70"
+          >
+            {format}
+          </li>
+        ))}
+      </ul>
+      <p className="mt-4 text-[11px] text-paper-100/45">
+        Max 10 MB · We&apos;ll parse your experience automatically
       </p>
     </div>
   );

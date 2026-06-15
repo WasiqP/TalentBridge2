@@ -27,8 +27,10 @@ function StepPreview({ type }: { type: ProductStep["preview"] }) {
         <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-ink-900/8 bg-paper-50 text-accent-lime-dark shadow-sm">
           <UploadCloud className="h-5 w-5" aria-hidden />
         </span>
-        <p className="mt-3 text-[12px] font-medium text-ink-950">jordan-avery-resume.pdf</p>
-        <p className="text-[10px] text-ink-500">Parsing via TalentDrobe API</p>
+        <p className="mt-3 text-[12px] font-medium text-ink-950">Drop your resume here</p>
+        <p className="mt-1 max-w-[24ch] text-pretty text-[10px] leading-relaxed text-ink-500">
+          PDF, DOC, or DOCX · Max 10 MB
+        </p>
       </div>
     );
   }

@@ -85,8 +85,8 @@ export function GuestHeroExtractionPreview({
         </div>
         <div className="space-y-2 p-2.5">
           <div className="rounded-lg border border-ink-900/10 bg-paper-100 px-2.5 py-2">
-            <p className="truncate text-[10px] font-semibold text-ink-950">jordan-avery-resume.pdf</p>
-            <p className="text-[8px] text-ink-500">Parsing sections…</p>
+            <p className="truncate text-[10px] font-semibold text-ink-950">resume.pdf</p>
+            <p className="text-[8px] text-ink-500">Reading your resume…</p>
           </div>
           {["Reading your resume", "Extracting experience", "Creating profile draft"].map(
             (step, index) => (

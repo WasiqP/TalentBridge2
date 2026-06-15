@@ -204,7 +204,7 @@ export const guestComparisonRows: ComparisonRow[] = [
 export const journeySteps: JourneyStep[] = [
   {
     n: "01",
-    title: "Drop your résumé",
+    title: "Drop your resume",
     description:
       "One file. No 12-field signup form. We parse it into a structured profile in seconds.",
     tag: "~10 seconds",
@@ -244,7 +244,7 @@ export type GuestHowItWorksStep = {
 export const guestHowItWorksSteps: GuestHowItWorksStep[] = [
   {
     n: "01",
-    title: "Drop your résumé",
+    title: "Drop your resume",
     description:
       "One file. No 12-field signup form. We parse it into a structured profile in seconds.",
     tag: "~10 seconds",
@@ -348,7 +348,7 @@ export type SeekerMetric = {
 };
 
 export const seekerMetrics: SeekerMetric[] = [
-  { value: 10, suffix: "s", label: "To build your profile", description: "From résumé upload to a complete, structured profile." },
+  { value: 10, suffix: "s", label: "To build your profile", description: "From resume upload to a complete, structured profile." },
   { value: 24, label: "Matched roles, instantly", description: "Average live roles surfaced on first upload." },
   { value: 3, suffix: "x", label: "More interviews", description: "Versus applying manually, per early users." },
   { value: 1, label: "Click to apply", description: "The agent tailors and submits — you approve." },
