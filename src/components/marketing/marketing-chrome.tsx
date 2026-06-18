@@ -6,12 +6,14 @@ import { AnimatePresence } from "motion/react";
 
 import { NavTransitionOverlay } from "@/components/marketing/nav-transition-overlay";
 import { SplashScreen } from "@/components/marketing/splash-screen";
+import { isGuestPreviewRoute } from "@/config/guest-preview-routes";
 import { isMarketingRoute } from "@/config/marketing-routes";
 
 /** Splash on each marketing page load + lime wipe between client navigations. */
 export function MarketingChrome() {
   const pathname = usePathname() ?? "";
-  const isMarketing = isMarketingRoute(pathname);
+  const isMarketing =
+    isMarketingRoute(pathname) && !isGuestPreviewRoute(pathname);
 
   const [showSplash, setShowSplash] = useState(isMarketing);
   const [splashReady, setSplashReady] = useState(!isMarketing);
