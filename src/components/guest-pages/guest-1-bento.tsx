@@ -5,7 +5,6 @@ import {
   FileEdit,
   MessageCircle,
   MousePointerClick,
-  Rss,
   ScanLine,
   Sparkles,
   type LucideIcon,
@@ -17,10 +16,7 @@ import { accentSpot } from "@/components/guest/accent";
 import {
   guest1FeaturedFeedLabel,
   guest1FeaturedSlides,
-  guest1HrNewsSlides,
-  guest1NewsFeedLabel,
   type Guest1FeaturedSlide,
-  type Guest1NewsSlide,
 } from "@/constants/guest-1-bento";
 import { seekerFeatures } from "@/constants/guest-page";
 import type { GuestAccent, SeekerFeature } from "@/constants/guest-page";
@@ -34,7 +30,6 @@ const icons: Record<string, LucideIcon> = {
   FileEdit,
   BellRing,
   MousePointerClick,
-  Rss,
 };
 
 const HOLD_SECONDS = 3.8;
@@ -44,7 +39,7 @@ type BentoCellConfig = {
   id: string;
   className: string;
   feature: SeekerFeature;
-  variant: "featured" | "compact" | "banner";
+  variant: "featured" | "compact";
 };
 
 const bentoCells: BentoCellConfig[] = [
@@ -77,12 +72,6 @@ const bentoCells: BentoCellConfig[] = [
     className: "col-span-1 min-h-[6rem] sm:min-h-[7rem] lg:min-h-[8rem]",
     feature: seekerFeatures[4],
     variant: "compact",
-  },
-  {
-    id: "f",
-    className: "col-span-4 min-h-[6.25rem] sm:min-h-[7.5rem] lg:min-h-[8.5rem]",
-    feature: seekerFeatures[5],
-    variant: "banner",
   },
 ];
 
@@ -363,64 +352,11 @@ function CompactCell({ feature }: { feature: SeekerFeature }) {
   );
 }
 
-function NewsSlidePanel({ slide }: { slide: Guest1NewsSlide }) {
-  return (
-    <div className="flex h-full flex-col justify-between gap-3 sm:flex-row sm:items-stretch sm:gap-5">
-      <div className="relative flex min-w-0 flex-1 gap-3">
-        <IconBadge icon={Rss} accent="violet" />
-        <div className="min-w-0 space-y-1.5">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="rounded-full bg-ink-950/6 px-2 py-0.5 text-[9px] font-medium uppercase tracking-[0.14em] text-ink-600">
-              {slide.category}
-            </span>
-            <span className="text-[10px] text-ink-400">
-              {slide.source} · {slide.published}
-            </span>
-          </div>
-          <h3 className="text-pretty text-[13px] font-medium leading-snug tracking-[-0.02em] text-ink-950 sm:text-[15px]">
-            {slide.headline}
-          </h3>
-          <p className="line-clamp-2 text-[11.5px] leading-relaxed text-ink-500 sm:text-[12.5px]">
-            {slide.excerpt}
-          </p>
-        </div>
-      </div>
-
-      {slide.pulse && (
-        <div className="flex shrink-0 items-center sm:w-[7.5rem] sm:justify-end">
-          <div className="rounded-xl bg-paper-50/80 px-3 py-2 text-center backdrop-blur-sm sm:px-4 sm:py-3">
-            <p className="text-[10px] font-medium uppercase tracking-[0.12em] text-ink-400">
-              Pulse
-            </p>
-            <p className="mt-0.5 text-[13px] font-medium leading-tight text-ink-950 sm:text-[14px]">
-              {slide.pulse}
-            </p>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-function BannerCell() {
-  return (
-    <div className="relative h-full overflow-hidden rounded-[20px] bg-paper-100/80 p-4 backdrop-blur-xl sm:p-5">
-      <AccentGlow accent="violet" />
-      <AutoTransitionStack feedLabel={guest1NewsFeedLabel} className="relative z-[1] min-h-full">
-        {guest1HrNewsSlides.map((slide) => (
-          <NewsSlidePanel key={slide.id} slide={slide} />
-        ))}
-      </AutoTransitionStack>
-    </div>
-  );
-}
-
 function BentoCell({ cell }: { cell: BentoCellConfig }) {
   return (
     <div className={cell.className}>
       {cell.variant === "featured" && <FeaturedCell />}
       {cell.variant === "compact" && <CompactCell feature={cell.feature} />}
-      {cell.variant === "banner" && <BannerCell />}
     </div>
   );
 }

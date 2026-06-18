@@ -6,6 +6,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
 import { Guest1Chat } from "@/components/guest-pages/guest-1-chat";
 import { Guest1Bento } from "@/components/guest-pages/guest-1-bento";
+import { Guest1RssCarousel } from "@/components/guest-pages/guest-1-rss-carousel";
 import { Guest1ResumePanel } from "@/components/guest-pages/guest-1-resume-panel";
 import { Button } from "@/components/ui/button";
 import { registerGsap } from "@/lib/gsap";
@@ -16,6 +17,8 @@ const EASE = [0.22, 1, 0.36, 1] as const;
 /** Design option 1 — conversation-first landing at `/guest-1`. */
 export function Guest1Page() {
   const sectionRef = useRef<HTMLElement>(null);
+  const feedSectionRef = useRef<HTMLElement>(null);
+  const feedContentRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
   const bentoRef = useRef<HTMLDivElement>(null);
   const [chatEngaged, setChatEngaged] = useState(false);
@@ -62,6 +65,44 @@ export function Guest1Page() {
 
       requestAnimationFrame(() => ScrollTrigger.refresh());
     }, section);
+
+    return () => ctx.revert();
+  }, [prefersReducedMotion]);
+
+  useLayoutEffect(() => {
+    const feedSection = feedSectionRef.current;
+    const feedContent = feedContentRef.current;
+    if (!feedSection || !feedContent) return;
+
+    const { gsap, ScrollTrigger } = registerGsap();
+
+    const ctx = gsap.context(() => {
+      gsap.set(feedContent, { autoAlpha: prefersReducedMotion ? 1 : 0, y: prefersReducedMotion ? 0 : 28 });
+
+      if (prefersReducedMotion) {
+        return;
+      }
+
+      gsap.fromTo(
+        feedContent,
+        { autoAlpha: 0, y: 28 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          ease: "power2.out",
+          duration: 0.8,
+          scrollTrigger: {
+            trigger: feedSection,
+            start: "top 85%",
+            end: "top 55%",
+            scrub: 0.35,
+            invalidateOnRefresh: true,
+          },
+        },
+      );
+
+      requestAnimationFrame(() => ScrollTrigger.refresh());
+    }, feedSection);
 
     return () => ctx.revert();
   }, [prefersReducedMotion]);
@@ -159,6 +200,19 @@ export function Guest1Page() {
               ref={bentoRef}
               className="absolute left-1/2 top-1/2 z-[1] w-full max-w-6xl -translate-x-1/2 -translate-y-1/2 px-2 sm:max-w-7xl lg:max-w-[88rem] sm:px-4"
             />
+          </div>
+        </section>
+
+        <section
+          ref={feedSectionRef}
+          className="relative border-t border-ink-900/6 bg-paper-50 px-4 py-12 sm:px-6 sm:py-16"
+          aria-label="HR World RSS feed"
+        >
+          <div
+            ref={feedContentRef}
+            className="mx-auto w-full max-w-6xl sm:max-w-7xl lg:max-w-[88rem]"
+          >
+            <Guest1RssCarousel />
           </div>
         </section>
       </main>

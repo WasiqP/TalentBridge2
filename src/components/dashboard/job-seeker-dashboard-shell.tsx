@@ -164,7 +164,7 @@ export function JobSeekerDashboardShell({
   }
 
   function handleBack() {
-    if (pathname === JOB_SEEKER_SEARCH_PATH) {
+    if (isStandalonePage) {
       setDirection(-1);
       router.push(JOB_SEEKER_DASHBOARD_PATH);
       return;
@@ -340,7 +340,7 @@ export function JobSeekerDashboardShell({
     phase === "extracting" ||
     phase === "complete" ||
     pathname === JOB_SEEKER_SEARCH_PATH;
-  const showBack = inClickFlow;
+  const showBack = inClickFlow || isStandalonePage;
   const showNext = !isStandalonePage && phase === "complete";
   const nextLabel = "Find jobs";
 

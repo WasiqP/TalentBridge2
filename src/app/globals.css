@@ -191,6 +191,15 @@
     animation: marquee 40s linear infinite reverse;
   }
 
+  @keyframes marquee-vertical {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(-50%);
+    }
+  }
+
   @keyframes float {
     0%, 100% {
       transform: translateY(0px);

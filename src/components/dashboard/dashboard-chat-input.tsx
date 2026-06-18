@@ -18,6 +18,8 @@ function isAllowedResume(file: File) {
 
 type DashboardChatInputProps = {
   variant?: "fixed" | "inline";
+  size?: "default" | "compact";
+  accent?: "default" | "lime";
   placeholder?: string;
   onSend?: (message: string) => void;
   /** Fires when the user focuses the composer — use to expand into a split chat layout. */
@@ -30,6 +32,8 @@ type DashboardChatInputProps = {
 
 export function DashboardChatInput({
   variant = "fixed",
+  size = "default",
+  accent = "default",
   placeholder = "Ask anything about your job search…",
   onSend,
   onEngage,
@@ -79,13 +83,26 @@ export function DashboardChatInput({
 
   const canSend = message.trim().length > 0 || attachedFile !== null;
 
+  const isCompact = size === "compact";
+  const isLime = accent === "lime";
+
+  const sendButtonClass = canSend
+    ? isLime
+      ? "bg-accent-lime text-ink-950 hover:bg-accent-lime-dark"
+      : "bg-ink-950 text-paper-50 hover:bg-ink-800"
+    : isLime
+      ? "bg-accent-lime/25 text-ink-500"
+      : "bg-ink-900/10 text-ink-400";
+
   const wrapperClass =
     variant === "fixed"
       ? "pointer-events-none fixed inset-x-0 bottom-0 z-[15] flex justify-center px-4 pb-5 sm:px-6 sm:pb-6"
       : "w-full";
 
-  const formClass =
-    variant === "fixed" ? "pointer-events-auto w-full max-w-2xl" : "w-full";
+  const formClass = cn(
+    variant === "fixed" ? "pointer-events-auto w-full max-w-2xl" : "w-full",
+    variant === "inline" && isCompact && "mx-auto max-w-md",
+  );
 
   return (
     <div className={cn(wrapperClass, className)} aria-label="Chat composer">
@@ -109,9 +126,17 @@ export function DashboardChatInput({
 
         <div
           className={cn(
-            "flex items-end gap-2 rounded-[1.75rem] border border-ink-900/12 bg-paper-50 py-2.5 shadow-[0_4px_24px_rgba(8,8,12,0.08)] transition",
-            showAttach ? "pl-4 pr-2.5 sm:pr-3" : "px-4",
-            "focus-within:border-ink-900/25 focus-within:shadow-[0_8px_32px_rgba(8,8,12,0.1)]",
+            "flex items-end gap-2 border bg-paper-50 transition",
+            isLime
+              ? "border-accent-lime/30 bg-white focus-within:border-accent-lime/50"
+              : cn(
+                  "border-ink-900/12 shadow-[0_4px_24px_rgba(8,8,12,0.08)] focus-within:border-ink-900/25 focus-within:shadow-[0_8px_32px_rgba(8,8,12,0.1)]",
+                  isCompact && "shadow-[0_2px_16px_rgba(8,8,12,0.06)]",
+                ),
+            isCompact
+              ? "rounded-full px-3 py-1.5"
+              : "rounded-[1.75rem] py-2.5",
+            showAttach ? "pl-4 pr-2.5 sm:pr-3" : isCompact ? "px-3" : "px-4",
           )}
         >
           <label className="sr-only" htmlFor={id}>
@@ -130,7 +155,12 @@ export function DashboardChatInput({
               }
             }}
             placeholder={placeholder}
-            className="max-h-32 min-h-[2.25rem] min-w-0 flex-1 resize-none bg-transparent py-1.5 text-[15px] leading-relaxed text-ink-900 placeholder:text-ink-400 focus:outline-none"
+            className={cn(
+              "max-h-32 min-w-0 flex-1 resize-none bg-transparent text-ink-900 placeholder:text-ink-400 focus:outline-none",
+              isCompact
+                ? "min-h-[1.75rem] py-1 text-[14px] leading-relaxed"
+                : "min-h-[2.25rem] py-1.5 text-[15px] leading-relaxed",
+            )}
           />
           {showAttach ? (
             <div className="flex shrink-0 items-end gap-1">
@@ -160,13 +190,12 @@ export function DashboardChatInput({
                 disabled={!canSend}
                 aria-label="Send message"
                 className={cn(
-                  "mb-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition",
-                  canSend
-                    ? "bg-ink-950 text-paper-50 hover:bg-ink-800"
-                    : "bg-ink-900/10 text-ink-400",
+                  "mb-0.5 inline-flex shrink-0 items-center justify-center rounded-full transition",
+                  isCompact ? "h-8 w-8" : "h-9 w-9",
+                  sendButtonClass,
                 )}
               >
-                <ArrowUp className="h-4 w-4" strokeWidth={2.5} />
+                <ArrowUp className={cn(isCompact ? "h-3.5 w-3.5" : "h-4 w-4")} strokeWidth={2.5} />
               </button>
             </div>
           ) : (
@@ -175,18 +204,17 @@ export function DashboardChatInput({
               disabled={!canSend}
               aria-label="Send message"
               className={cn(
-                "mb-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition",
-                canSend
-                  ? "bg-ink-950 text-paper-50 hover:bg-ink-800"
-                  : "bg-ink-900/10 text-ink-400",
+                "mb-0.5 inline-flex shrink-0 items-center justify-center rounded-full transition",
+                isCompact ? "h-8 w-8" : "h-9 w-9",
+                sendButtonClass,
               )}
             >
-              <ArrowUp className="h-4 w-4" strokeWidth={2.5} />
+              <ArrowUp className={cn(isCompact ? "h-3.5 w-3.5" : "h-4 w-4")} strokeWidth={2.5} />
             </button>
           )}
         </div>
         {showDisclaimer ? (
-          <p className="mt-2 text-center text-[11px] text-ink-400">
+          <p className={cn("text-center text-ink-400", isCompact ? "mt-1.5 text-[10px]" : "mt-2 text-[11px]")}>
             AI copilot can make mistakes. Verify important details.
           </p>
         ) : null}
