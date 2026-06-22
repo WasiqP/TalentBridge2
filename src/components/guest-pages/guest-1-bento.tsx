@@ -10,9 +10,10 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { forwardRef, useEffect, useRef, useState, type ReactNode } from "react";
-import { useReducedMotion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 
-import { accentSpot } from "@/components/guest/accent";
+import { accentGlow, accentSpot, accentText } from "@/components/guest/accent";
+import { SpotlightCard } from "@/components/ui/spotlight-card";
 import {
   guest1FeaturedFeedLabel,
   guest1FeaturedSlides,
@@ -30,6 +31,14 @@ const icons: Record<string, LucideIcon> = {
   FileEdit,
   BellRing,
   MousePointerClick,
+};
+
+/** Legible icon tints for the gradient "spark" chips on light cards. */
+const iconTintLight: Record<GuestAccent, string> = {
+  lime: "text-accent-lime-dark",
+  violet: "text-accent-violet",
+  cyan: "text-[#0ea5a0]",
+  amber: "text-[#cf8a1c]",
 };
 
 const HOLD_SECONDS = 3.8;
@@ -97,11 +106,19 @@ function IconBadge({
   return (
     <span
       className={cn(
-        "inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl sm:h-10 sm:w-10",
-        dark ? "bg-paper-50/10 text-accent-lime" : "bg-ink-950 text-accent-lime",
+        "relative inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ring-1 sm:h-10 sm:w-10",
+        dark ? "ring-paper-50/12" : "ring-ink-900/8",
       )}
+      style={{
+        background: `linear-gradient(135deg, ${accentGlow[accent]}, transparent 72%)`,
+      }}
     >
-      <Icon className="h-4 w-4 sm:h-[18px] sm:w-[18px]" />
+      <Icon
+        className={cn(
+          "h-4 w-4 sm:h-[18px] sm:w-[18px]",
+          dark ? accentText[accent] : iconTintLight[accent],
+        )}
+      />
     </span>
   );
 }
@@ -315,10 +332,24 @@ function FeaturedSlidePanel({ slide }: { slide: Guest1FeaturedSlide }) {
 }
 
 function FeaturedCell() {
+  const prefersReducedMotion = useReducedMotion();
+
   return (
-    <div className="relative h-full overflow-hidden rounded-[20px] bg-ink-950/95 p-5 text-paper-50 backdrop-blur-xl sm:p-6">
-      <div className="absolute inset-0 gradient-mesh opacity-40" aria-hidden />
-      <AccentGlow accent="lime" />
+    <div className="relative h-full overflow-hidden rounded-3xl bg-ink-950 p-5 text-paper-50 sm:p-6">
+      <div className="absolute inset-0 gradient-mesh opacity-50" aria-hidden />
+      <div className="absolute inset-0 bg-grid opacity-25" aria-hidden />
+
+      {/* Iridescent "intelligence" orb — slowly drifts like Copilot. */}
+      <motion.div
+        aria-hidden
+        className="pointer-events-none absolute -right-12 -top-14 h-48 w-48 rounded-full blur-3xl"
+        style={{
+          background:
+            "conic-gradient(from 90deg, rgba(193,249,104,0.55), rgba(94,234,212,0.45), rgba(139,92,246,0.55), rgba(193,249,104,0.55))",
+        }}
+        animate={prefersReducedMotion ? undefined : { rotate: 360 }}
+        transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
+      />
 
       <AutoTransitionStack
         feedLabel={guest1FeaturedFeedLabel}
@@ -337,18 +368,34 @@ function CompactCell({ feature }: { feature: SeekerFeature }) {
   const Icon = icons[feature.icon] ?? Sparkles;
 
   return (
-    <div className="relative flex h-full flex-col justify-between overflow-hidden rounded-[20px] bg-paper-50/65 p-4 backdrop-blur-xl backdrop-saturate-150 sm:p-5">
-      <AccentGlow accent={feature.accent} />
-      <IconBadge icon={Icon} accent={feature.accent} />
-      <div className="relative mt-4 space-y-1.5">
-        <h3 className="text-[13px] font-medium leading-snug tracking-[-0.02em] text-ink-950 sm:text-[14px]">
-          {feature.title}
-        </h3>
-        <p className="line-clamp-3 text-[11.5px] leading-relaxed text-ink-500 sm:text-[12px]">
-          {feature.description}
-        </p>
+    <SpotlightCard
+      color={accentSpot[feature.accent]}
+      className={cn(
+        "h-full border border-ink-900/8 bg-white/80 shadow-[0_2px_16px_rgba(8,8,12,0.04)] backdrop-blur-xl backdrop-saturate-150",
+        "transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1 hover:border-ink-900/14 hover:shadow-[0_18px_44px_-22px_rgba(8,8,12,0.28)]",
+      )}
+    >
+      {/* Accent hairline on hover */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 z-[2] h-px opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        style={{
+          background: `linear-gradient(90deg, transparent, ${accentGlow[feature.accent]}, transparent)`,
+        }}
+      />
+      <div className="relative flex h-full flex-col justify-between p-4 sm:p-5">
+        <AccentGlow accent={feature.accent} />
+        <IconBadge icon={Icon} accent={feature.accent} />
+        <div className="relative mt-4 space-y-1.5">
+          <h3 className="text-[13px] font-medium leading-snug tracking-[-0.02em] text-ink-950 sm:text-[14px]">
+            {feature.title}
+          </h3>
+          <p className="line-clamp-3 text-[11.5px] leading-relaxed text-ink-500 sm:text-[12px]">
+            {feature.description}
+          </p>
+        </div>
       </div>
-    </div>
+    </SpotlightCard>
   );
 }
 
@@ -365,7 +412,7 @@ type Guest1BentoProps = {
   className?: string;
 };
 
-/** Bento grid for guest option 1 — reveal is driven by the parent page scroll timeline. */
+/** Bento grid for guest option 1 — revealed in the scroll section below the hero. */
 export const Guest1Bento = forwardRef<HTMLDivElement, Guest1BentoProps>(
   function Guest1Bento({ className }, ref) {
     return (

@@ -23,6 +23,8 @@ type DashboardProfileBuildCanvasProps = {
   profile?: JobSeekerProfile | null;
   isComplete?: boolean;
   errorMessage?: string | null;
+  /** Nested inside a parent flow container — softer chrome and copy. */
+  embedded?: boolean;
   className?: string;
 };
 
@@ -167,6 +169,7 @@ export function DashboardProfileBuildCanvas({
   profile,
   isComplete = false,
   errorMessage,
+  embedded = false,
   className,
 }: DashboardProfileBuildCanvasProps) {
   const stage = getBuildStage(steps, isComplete);
@@ -180,7 +183,8 @@ export function DashboardProfileBuildCanvas({
   return (
     <section
       className={cn(
-        "relative flex min-h-[min(640px,72vh)] flex-col overflow-hidden rounded-[28px] border border-ink-900/12 bg-paper-50 shadow-[0_2px_24px_rgba(8,8,12,0.04)] sm:rounded-[32px]",
+        "relative flex flex-col overflow-hidden rounded-[28px] border border-ink-900/12 bg-paper-50 shadow-[0_2px_24px_rgba(8,8,12,0.04)] sm:rounded-[32px]",
+        embedded ? "min-h-0" : "min-h-[min(640px,72vh)]",
         hasError && "opacity-90",
         className,
       )}
@@ -214,7 +218,9 @@ export function DashboardProfileBuildCanvas({
             </p>
             <p className="mt-1 max-w-[42ch] text-[13px] leading-relaxed text-ink-500">
               {isComplete
-                ? "Every section has been placed. Opening the full profile next."
+                ? embedded
+                  ? "Every section has been placed. Your full profile is below."
+                  : "Every section has been placed. Opening the full profile next."
                 : "Watch each block lock in as we read and structure your resume."}
             </p>
           </div>
@@ -430,7 +436,7 @@ export function DashboardProfileBuildCanvas({
         </BuildBlockShell>
 
         <AnimatePresence>
-          {isComplete ? (
+          {isComplete && !embedded ? (
             <motion.p
               key="ready"
               initial={{ opacity: 0, y: 10 }}

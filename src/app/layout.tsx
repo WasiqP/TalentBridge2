@@ -34,7 +34,7 @@ const instrumentSerif = Instrument_Serif({
 const poppins = Poppins({
   variable: "--font-poppins",
   subsets: ["latin"],
-  weight: ["700"],
+  weight: ["500", "600", "700"],
   display: "swap",
 });
 

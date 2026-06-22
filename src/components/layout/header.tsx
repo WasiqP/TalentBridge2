@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { GuestDesignPreviewNav } from "@/components/home/guest-design-preview-nav";
 import { Container } from "@/components/ui/container";
 import { Logo } from "@/components/ui/logo";
 import { mainNav } from "@/config/navigation";
@@ -63,7 +64,8 @@ export function Header() {
                 );
               })}
             </nav>
-            <div className="hidden items-center gap-2 md:flex">
+            <div className="hidden items-center gap-2.5 md:flex">
+              <GuestDesignPreviewNav variant="header" />
               <Button variant="outline" size="sm" href="/sign-up" asChild>
                 Sign up
               </Button>
@@ -96,13 +98,16 @@ export function Header() {
                 {item.title}
               </Link>
             ))}
-            <div className="mt-2 grid grid-cols-2 gap-2 pt-2">
-              <Button variant="outline" href="/sign-up" asChild>
-                Sign up
-              </Button>
-              <Button variant="lime" href="/sign-in" asChild>
-                Sign in
-              </Button>
+            <div className="mt-2 flex flex-col gap-3 pt-2">
+              <GuestDesignPreviewNav variant="header" className="w-full [&_button]:w-full [&_button]:justify-center" />
+              <div className="grid grid-cols-2 gap-2">
+                <Button variant="outline" href="/sign-up" asChild>
+                  Sign up
+                </Button>
+                <Button variant="lime" href="/sign-in" asChild>
+                  Sign in
+                </Button>
+              </div>
             </div>
           </Container>
         </div>
