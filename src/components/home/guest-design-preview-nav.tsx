@@ -10,9 +10,7 @@ import { cn } from "@/lib/utils";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-const previewRoutes = guestPageRoutes.filter((route) =>
-  ["guest-1", "guest-2", "guest-3", "guest-4"].includes(route.id),
-);
+const previewRoutes = guestPageRoutes;
 
 type GuestDesignPreviewNavProps = {
   /** `header` — site header next to auth; `hero` — dark hero CTAs. */
@@ -20,7 +18,7 @@ type GuestDesignPreviewNavProps = {
   className?: string;
 };
 
-/** Nav — jump to alternate guest landing previews (guest-1–4). */
+/** Nav — jump to alternate guest landing previews (guest-1–5). */
 export function GuestDesignPreviewNav({
   variant = "header",
   className,
