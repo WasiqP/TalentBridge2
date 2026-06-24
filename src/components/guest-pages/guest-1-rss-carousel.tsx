@@ -18,9 +18,8 @@ import {
 import type { HrSignal } from "@/constants/guest-3";
 import { cn } from "@/lib/utils";
 
-const CARD_WIDTH = 320;
 const CARD_GAP = 16;
-const AUTO_ADVANCE_MS = 5200;
+const AUTO_ADVANCE_MS = 6000;
 
 function formatRelativeTime(isoDate: string): string {
   if (!isoDate) return "Recently";
@@ -55,6 +54,28 @@ function signalToSlide(signal: HrSignal): Guest1NewsSlide {
   };
 }
 
+function useCardsPerView() {
+  const [cardsPerView, setCardsPerView] = useState(1);
+
+  useEffect(() => {
+    function update() {
+      if (window.matchMedia("(min-width: 1280px)").matches) {
+        setCardsPerView(3);
+      } else if (window.matchMedia("(min-width: 768px)").matches) {
+        setCardsPerView(2);
+      } else {
+        setCardsPerView(1);
+      }
+    }
+
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
+  return cardsPerView;
+}
+
 function RssCarouselCard({
   slide,
   link,
@@ -67,18 +88,18 @@ function RssCarouselCard({
   const shell = (
     <article
       className={cn(
-        "flex h-full flex-col justify-between rounded-[18px] border bg-paper-50/75 p-4 backdrop-blur-xl transition-[border-color,box-shadow] sm:p-5",
+        "flex h-full min-h-[10.5rem] flex-col justify-between rounded-[18px] border bg-white p-4 shadow-[0_2px_16px_rgba(8,8,12,0.04)] transition-[border-color,box-shadow] sm:min-h-[11.5rem] sm:p-5",
         active
-          ? "border-accent-lime/40 shadow-[0_12px_40px_-24px_rgba(196,255,77,0.45)]"
+          ? "border-accent-lime/45 shadow-[0_12px_40px_-24px_rgba(196,255,77,0.4)]"
           : "border-ink-900/8",
       )}
     >
       <div className="flex items-start gap-3">
-        <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-ink-950 text-accent-lime">
+        <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-ink-950 text-accent-lime sm:h-10 sm:w-10">
           <Rss className="h-4 w-4" />
         </span>
-        <div className="min-w-0 space-y-1.5">
-          <div className="flex flex-wrap items-center gap-2">
+        <div className="min-w-0 flex-1 space-y-1.5">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
             <span className="rounded-full bg-ink-950/6 px-2 py-0.5 text-[9px] font-medium uppercase tracking-[0.14em] text-ink-600">
               {slide.category}
             </span>
@@ -86,17 +107,17 @@ function RssCarouselCard({
               {slide.source} · {slide.published}
             </span>
           </div>
-          <h3 className="line-clamp-2 text-[13.5px] font-medium leading-snug tracking-[-0.02em] text-ink-950 sm:text-[14.5px]">
+          <h3 className="line-clamp-2 text-[14px] font-medium leading-snug tracking-[-0.02em] text-ink-950 sm:text-[15px]">
             {slide.headline}
           </h3>
-          <p className="line-clamp-2 text-[11.5px] leading-relaxed text-ink-500 sm:text-[12px]">
+          <p className="line-clamp-2 text-[12px] leading-relaxed text-ink-500">
             {slide.excerpt}
           </p>
         </div>
       </div>
 
       {slide.pulse ? (
-        <div className="mt-4 flex items-center justify-between gap-2">
+        <div className="mt-3 flex items-center justify-between gap-2 sm:mt-4">
           <span className="rounded-full bg-accent-lime/15 px-2.5 py-1 text-[10px] font-medium text-ink-700">
             {slide.pulse}
           </span>
@@ -126,16 +147,30 @@ function RssCarouselCard({
 
 type Guest1RssCarouselProps = {
   className?: string;
+  /** @deprecated Use default layout — kept for backwards compatibility. */
+  compact?: boolean;
 };
 
-/** Horizontal RSS carousel — live HR feed with scroll-snap and auto-advance. */
+/** Horizontal RSS carousel — fits full cards per viewport, no awkward cut-off. */
 export function Guest1RssCarousel({ className }: Guest1RssCarouselProps) {
+  const viewportRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
+  const strideRef = useRef(336);
+  const activeIndexRef = useRef(0);
+  const rafRef = useRef<number | null>(null);
+
   const [slides, setSlides] = useState<Guest1NewsSlide[]>(guest1HrNewsSlides);
   const [links, setLinks] = useState<Record<string, string>>({});
   const [activeIndex, setActiveIndex] = useState(0);
   const [live, setLive] = useState(false);
+  const [cardWidth, setCardWidth] = useState<number | null>(null);
+
+  const cardsPerView = useCardsPerView();
   const prefersReducedMotion = useReducedMotion();
+
+  const maxIndex = Math.max(0, slides.length - cardsPerView);
+  const pageCount = maxIndex + 1;
+  const progress = pageCount <= 1 ? 100 : ((Math.min(activeIndex, maxIndex) + 1) / pageCount) * 100;
 
   useEffect(() => {
     let cancelled = false;
@@ -157,22 +192,63 @@ export function Guest1RssCarousel({ className }: Guest1RssCarouselProps) {
     };
   }, []);
 
-  const scrollToIndex = useCallback((index: number) => {
-    const track = trackRef.current;
-    if (!track || slides.length === 0) return;
-    const normalized = ((index % slides.length) + slides.length) % slides.length;
-    const left = normalized * (CARD_WIDTH + CARD_GAP);
-    track.scrollTo({ left, behavior: prefersReducedMotion ? "auto" : "smooth" });
-    setActiveIndex(normalized);
-  }, [slides.length, prefersReducedMotion]);
+  useEffect(() => {
+    const viewport = viewportRef.current;
+    if (!viewport) return;
+
+    const measure = () => {
+      const width = viewport.clientWidth;
+      const nextCardWidth = (width - CARD_GAP * (cardsPerView - 1)) / cardsPerView;
+      setCardWidth(nextCardWidth);
+      strideRef.current = nextCardWidth + CARD_GAP;
+    };
+
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(viewport);
+    return () => ro.disconnect();
+  }, [cardsPerView]);
+
+  useEffect(() => {
+    if (activeIndex > maxIndex) {
+      setActiveIndex(maxIndex);
+      activeIndexRef.current = maxIndex;
+    }
+  }, [activeIndex, maxIndex]);
+
+  const scrollToIndex = useCallback(
+    (index: number) => {
+      const track = trackRef.current;
+      if (!track || slides.length === 0) return;
+
+      const clamped = Math.max(0, Math.min(index, maxIndex));
+      track.scrollTo({
+        left: clamped * strideRef.current,
+        behavior: prefersReducedMotion ? "auto" : "smooth",
+      });
+      activeIndexRef.current = clamped;
+      setActiveIndex(clamped);
+    },
+    [maxIndex, prefersReducedMotion, slides.length],
+  );
 
   const goNext = useCallback(() => {
-    scrollToIndex(activeIndex + 1);
-  }, [activeIndex, scrollToIndex]);
+    scrollToIndex(activeIndexRef.current >= maxIndex ? 0 : activeIndexRef.current + 1);
+  }, [maxIndex, scrollToIndex]);
 
   const goPrev = useCallback(() => {
-    scrollToIndex(activeIndex - 1);
-  }, [activeIndex, scrollToIndex]);
+    scrollToIndex(activeIndexRef.current <= 0 ? maxIndex : activeIndexRef.current - 1);
+  }, [maxIndex, scrollToIndex]);
+
+  useEffect(() => {
+    if (cardWidth === null) return;
+    const track = trackRef.current;
+    if (!track) return;
+    track.scrollTo({
+      left: activeIndexRef.current * strideRef.current,
+      behavior: "auto",
+    });
+  }, [cardWidth, cardsPerView]);
 
   useEffect(() => {
     if (prefersReducedMotion || slides.length < 2) return;
@@ -185,13 +261,28 @@ export function Guest1RssCarousel({ className }: Guest1RssCarouselProps) {
     if (!track) return;
 
     const onScroll = () => {
-      const index = Math.round(track.scrollLeft / (CARD_WIDTH + CARD_GAP));
-      setActiveIndex(Math.max(0, Math.min(index, slides.length - 1)));
+      if (rafRef.current !== null) return;
+      rafRef.current = window.requestAnimationFrame(() => {
+        rafRef.current = null;
+        const stride = strideRef.current;
+        if (stride <= 0) return;
+        const index = Math.round(track.scrollLeft / stride);
+        const clamped = Math.max(0, Math.min(index, maxIndex));
+        if (clamped !== activeIndexRef.current) {
+          activeIndexRef.current = clamped;
+          setActiveIndex(clamped);
+        }
+      });
     };
 
     track.addEventListener("scroll", onScroll, { passive: true });
-    return () => track.removeEventListener("scroll", onScroll);
-  }, [slides.length]);
+    return () => {
+      track.removeEventListener("scroll", onScroll);
+      if (rafRef.current !== null) {
+        window.cancelAnimationFrame(rafRef.current);
+      }
+    };
+  }, [maxIndex, slides.length]);
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "ArrowRight") {
@@ -209,36 +300,44 @@ export function Guest1RssCarousel({ className }: Guest1RssCarouselProps) {
       aria-roledescription="carousel"
       aria-label={guest1NewsFeedLabel}
     >
-      <div className="mb-3 flex items-center justify-between gap-3 sm:mb-4">
-        <div className="flex min-w-0 items-center gap-2">
-          <span className="relative flex h-2 w-2 shrink-0">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent-lime opacity-40" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-accent-lime" />
-          </span>
-          <span className="truncate text-[10px] font-medium uppercase tracking-[0.16em] text-ink-500">
-            {guest1NewsFeedLabel}
-            {live ? " · live" : ""}
-          </span>
+      <div className="mb-6 flex flex-wrap items-end justify-between gap-4 sm:mb-8">
+        <div className="min-w-0">
+          <div className="flex items-center gap-2">
+            <span className="relative flex h-2 w-2 shrink-0">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent-lime opacity-40" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-accent-lime" />
+            </span>
+            <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink-400">
+              HR World · RSS feed
+              {live ? " · live" : ""}
+            </span>
+          </div>
+          <h2 className="mt-1.5 text-[clamp(1.35rem,2.8vw,1.85rem)] font-medium leading-tight tracking-[-0.02em] text-ink-950">
+            What&apos;s moving in hiring
+          </h2>
+          <p className="mt-1.5 max-w-xl text-[14px] leading-relaxed text-ink-500">
+            Headlines from HR sources — swipe or use arrows to browse.
+          </p>
         </div>
 
         <div className="flex shrink-0 items-center gap-2">
-          <span className="hidden text-[10px] font-medium tabular-nums tracking-wide text-ink-400 sm:inline">
-            {activeIndex + 1} / {slides.length}
+          <span className="text-[11px] font-medium tabular-nums tracking-wide text-ink-400">
+            {Math.min(activeIndex, maxIndex) + 1} / {pageCount}
           </span>
           <div className="flex gap-1">
             <button
               type="button"
               onClick={goPrev}
-              aria-label="Previous headline"
-              className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-ink-900/10 bg-paper-50/80 text-ink-700 transition hover:border-ink-900/20 hover:bg-white"
+              aria-label="Previous headlines"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-ink-900/10 bg-white text-ink-700 transition hover:border-ink-900/20 hover:bg-paper-50"
             >
               <ChevronLeft className="h-4 w-4" />
             </button>
             <button
               type="button"
               onClick={goNext}
-              aria-label="Next headline"
-              className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-ink-900/10 bg-paper-50/80 text-ink-700 transition hover:border-ink-900/20 hover:bg-white"
+              aria-label="Next headlines"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-ink-900/10 bg-white text-ink-700 transition hover:border-ink-900/20 hover:bg-paper-50"
             >
               <ChevronRight className="h-4 w-4" />
             </button>
@@ -246,28 +345,19 @@ export function Guest1RssCarousel({ className }: Guest1RssCarouselProps) {
         </div>
       </div>
 
-      <div className="flex gap-[3px]">
-        {slides.map((_, index) => (
-          <button
-            key={index}
-            type="button"
-            aria-label={`Go to headline ${index + 1}`}
-            onClick={() => scrollToIndex(index)}
-            className={cn(
-              "h-1 flex-1 rounded-full transition-colors",
-              index === activeIndex ? "bg-accent-lime" : "bg-ink-900/8 hover:bg-ink-900/14",
-            )}
-          />
-        ))}
+      <div className="mb-4 h-1 overflow-hidden rounded-full bg-ink-900/8">
+        <div
+          className="h-full rounded-full bg-accent-lime transition-[width] duration-300 ease-out"
+          style={{ width: `${progress}%` }}
+          aria-hidden
+        />
       </div>
 
-      <div
-        className="relative mt-4 [mask-image:linear-gradient(to_right,transparent,black_3%,black_97%,transparent)]"
-        onKeyDown={onKeyDown}
-      >
+      <div ref={viewportRef} className="overflow-hidden" onKeyDown={onKeyDown}>
         <div
           ref={trackRef}
-          className="scrollbar-hide flex snap-x snap-mandatory gap-4 overflow-x-auto pb-1 pt-0.5"
+          className="scrollbar-hide flex snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain pb-1 pt-0.5"
+          style={{ gap: CARD_GAP, scrollPaddingInline: 0 }}
           tabIndex={0}
           role="list"
         >
@@ -275,9 +365,12 @@ export function Guest1RssCarousel({ className }: Guest1RssCarouselProps) {
             <div
               key={slide.id}
               role="listitem"
-              aria-hidden={index !== activeIndex}
-              className="h-[9.5rem] w-[min(20rem,78vw)] shrink-0 snap-start sm:h-[10.25rem] sm:w-[20rem]"
-              style={{ scrollSnapAlign: "start" }}
+              aria-hidden={index < activeIndex || index >= activeIndex + cardsPerView}
+              className="shrink-0 snap-start"
+              style={{
+                width: cardWidth ?? `calc((100% - ${CARD_GAP * (cardsPerView - 1)}px) / ${cardsPerView})`,
+                scrollSnapAlign: "start",
+              }}
             >
               <RssCarouselCard
                 slide={slide}

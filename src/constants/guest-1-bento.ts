@@ -2,6 +2,9 @@ import type { GuestAccent } from "@/constants/guest-page";
 
 export type Guest1SlideCategory =
   | "Your journey"
+  | "Step 1"
+  | "Step 2"
+  | "Step 3"
   | "Market pulse"
   | "HR World"
   | "What's new";
@@ -26,118 +29,37 @@ export type Guest1NewsSlide = {
   pulse?: string;
 };
 
-/** Large bento — product journey + market pulse + HR context. */
+/** Large bento — simple 3-step journey (no duplicate of the four tool tiles). */
 export const guest1FeaturedSlides: Guest1FeaturedSlide[] = [
   {
-    id: "f-1",
-    category: "Your journey",
+    id: "step-1",
+    category: "Step 1",
     icon: "ScanLine",
     accent: "lime",
-    title: "Profile in seconds",
+    title: "Upload your résumé",
     description:
-      "Upload once. We turn your résumé into a rich, recruiter-ready profile — no manual typing.",
-    highlights: ["Product", "React", "TypeScript", "Leadership"],
+      "Drop your file once. We build your full profile in seconds — skills, experience, and preferences included.",
+    highlights: ["No forms to fill", "Ready in ~10 seconds"],
   },
   {
-    id: "f-2",
-    category: "Your journey",
+    id: "step-2",
+    category: "Step 2",
     icon: "Sparkles",
     accent: "cyan",
-    title: "Explainable matches",
-    description: "Every role shows why it fits — no black-box scores.",
-    highlights: ["Senior Product Designer · 94% fit", "Lead UX Engineer · 89% fit"],
-  },
-  {
-    id: "f-3",
-    category: "Your journey",
-    icon: "MessageCircle",
-    accent: "violet",
-    title: "A career agent that talks",
+    title: "See roles that fit",
     description:
-      "Ask about salary, switching fields, or what to learn next. It answers with your context.",
-    highlights: ["Pivot advice", "Salary benchmarks", "Skill gap plans"],
+      "Live jobs scored against your profile. Every listing shows a match % and why it fits you.",
+    highlights: ["Ranked by fit", "Clear match reasons"],
   },
   {
-    id: "f-4",
-    category: "Your journey",
-    icon: "FileEdit",
-    accent: "amber",
-    title: "Résumé tailored per role",
-    description: "The agent rewrites your résumé for each application automatically.",
-    highlights: ["Base résumé saved", "Role-specific draft ready"],
-  },
-  {
-    id: "f-5",
-    category: "Your journey",
-    icon: "BellRing",
-    accent: "lime",
-    title: "Always-on job alerts",
-    description:
-      "Your agent watches the market 24/7 and pings you the moment a strong role opens.",
-    highlights: ["4 high-fit alerts today", "12 new roles this week"],
-  },
-  {
-    id: "f-6",
-    category: "Your journey",
+    id: "step-3",
+    category: "Step 3",
     icon: "MousePointerClick",
     accent: "violet",
-    title: "One-click apply",
-    description: "Approve and you're in. No re-entering the same details ten times.",
-    highlights: ["18 applications tracked", "6 follow-ups sent"],
-  },
-  {
-    id: "f-7",
-    category: "Market pulse",
-    icon: "Sparkles",
-    accent: "cyan",
-    title: "Design roles up 12% this month",
-    description: "Product & UX hiring accelerated across mid-market SaaS companies.",
-    highlights: ["Remote-friendly: 68%", "Avg. time-to-fill: 28 days"],
-  },
-  {
-    id: "f-8",
-    category: "Market pulse",
-    icon: "ScanLine",
-    accent: "lime",
-    title: "AI skills appearing in 41% of PM reqs",
-    description: "Job descriptions increasingly mention copilots, LLM workflows, and evals.",
-    highlights: ["Prompt design", "AI product sense", "Data literacy"],
-  },
-  {
-    id: "f-9",
-    category: "HR World",
-    icon: "MessageCircle",
-    accent: "violet",
-    title: "Employers shift to skills-based hiring",
-    description: "More teams drop degree requirements in favor of portfolio and project proof.",
-    highlights: ["SHRM", "Workforce trends", "2h ago"],
-  },
-  {
-    id: "f-10",
-    category: "HR World",
-    icon: "BellRing",
-    accent: "amber",
-    title: "Return-to-office policies soften",
-    description: "Hybrid remains default as talent markets stay competitive in tech hubs.",
-    highlights: ["Flexible schedules", "Hub + remote mix"],
-  },
-  {
-    id: "f-11",
-    category: "What's new",
-    icon: "Sparkles",
-    accent: "lime",
-    title: "Interview prep mode is live",
-    description: "Practice answers tailored to each role before recruiters reach out.",
-    highlights: ["New in TalentDrobe", "Just shipped"],
-  },
-  {
-    id: "f-12",
-    category: "What's new",
-    icon: "FileEdit",
-    accent: "cyan",
-    title: "Cover letters, agent-written",
-    description: "Short, human-sounding letters drafted from your profile and the job post.",
-    highlights: ["Beta", "Edit before send"],
+    title: "Apply in one click",
+    description:
+      "Your agent tailors your résumé, submits the application, and tracks it. You review and approve.",
+    highlights: ["Tailored per role", "All in one dashboard"],
   },
 ];
 
@@ -291,5 +213,5 @@ export const guest1HrNewsSlides: Guest1NewsSlide[] = [
   },
 ];
 
-export const guest1FeaturedFeedLabel = "Your search · Live pulse";
+export const guest1FeaturedFeedLabel = "How it works";
 export const guest1NewsFeedLabel = "HR World · RSS feed";

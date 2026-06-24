@@ -9,9 +9,10 @@ import {
 import { AnimatePresence, motion } from "motion/react";
 import { ArrowRight, ChevronLeft, Sparkles, Wand2, X } from "lucide-react";
 
+import { Guest3HowToLoop } from "@/components/guest-pages/guest-3-how-to-loop";
 import { Guest3ResumeDrop } from "@/components/guest-pages/guest-3-resume-drop";
 import { Guest3GlassLadder } from "@/components/guest-pages/guest-3-glass-ladder";
-import { Guest3SignalBento } from "@/components/guest-pages/guest-3-signal-bento";
+import { Guest3RightRail } from "@/components/guest-pages/guest-3-signal-bento";
 import { Guest3ProfileRail } from "@/components/guest-pages/guest-3-profile-rail";
 import { Guest3Copilot } from "@/components/guest-pages/guest-3-copilot";
 import {
@@ -189,9 +190,9 @@ export function Guest3Page() {
       {phase === "upload" ? (
         <div className="relative flex min-h-0 flex-1 overflow-hidden">
           <Guest3GlassLadder className="pointer-events-none absolute inset-y-6 left-4 z-0 hidden lg:block xl:inset-y-8 xl:left-6" />
-          <Guest3SignalBento className="pointer-events-none absolute inset-y-6 right-6 z-0 hidden lg:flex xl:inset-y-8 xl:right-10" />
+          <Guest3RightRail className="pointer-events-none absolute bottom-8 right-5 top-[4.75rem] z-0 hidden lg:flex xl:right-8" />
 
-          <div className="relative z-10 flex flex-1 items-center justify-center px-4 py-6 sm:px-6 lg:px-[min(26vw,24rem)]">
+          <div className="relative z-10 flex flex-1 items-center justify-center px-4 py-6 sm:px-6 lg:px-[min(21vw,20rem)] xl:px-[min(22vw,21rem)]">
             <div className="mx-auto w-full max-w-xl text-center">
             <span className="inline-flex items-center gap-2 rounded-full border border-accent-lime/35 bg-accent-lime/12 px-3 py-1 text-[11px] font-medium text-ink-700 sm:text-[12px]">
               <Sparkles className="h-3.5 w-3.5 text-accent-lime-dark" />
@@ -222,6 +223,8 @@ export function Guest3Page() {
                 sampleFileName={SAMPLE_FILE}
                 onFile={startParsing}
               />
+
+              <Guest3HowToLoop className="mt-5 sm:mt-6" />
             </div>
 
             </div>

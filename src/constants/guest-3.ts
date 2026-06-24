@@ -154,6 +154,79 @@ export const guest3HrPillars = [
   "Layoffs, policy, and people moves that matter to you",
 ] as const;
 
+export type Guest3Agency = {
+  id: string;
+  name: string;
+  specialty: string;
+  roles: string;
+  location: string;
+  blurb: string;
+};
+
+export const guest3Agencies: Guest3Agency[] = [
+  {
+    id: "ag1",
+    name: "Michael Page",
+    specialty: "Product & Design",
+    roles: "12 open roles",
+    location: "Remote · US & EU",
+    blurb: "Places senior ICs and design leads at mid-market SaaS firms.",
+  },
+  {
+    id: "ag2",
+    name: "Hired",
+    specialty: "Engineering & Data",
+    roles: "28 open roles",
+    location: "Remote · Global",
+    blurb: "Tech-focused recruiters with fast intro loops.",
+  },
+  {
+    id: "ag3",
+    name: "Creative Circle",
+    specialty: "Creative & Brand",
+    roles: "9 open roles",
+    location: "Hybrid · NYC",
+    blurb: "Agencies and in-house teams hiring designers and writers.",
+  },
+  {
+    id: "ag4",
+    name: "Robert Half",
+    specialty: "Finance & Ops",
+    roles: "16 open roles",
+    location: "Hybrid · US",
+    blurb: "Contract and full-time roles with clear pay bands upfront.",
+  },
+];
+
+export type Guest3HowToStep = {
+  step: number;
+  title: string;
+  detail: string;
+};
+
+export const guest3HowToSteps: Guest3HowToStep[] = [
+  {
+    step: 1,
+    title: "Drop your résumé",
+    detail: "We build your profile in seconds — skills, roles, and preferences included.",
+  },
+  {
+    step: 2,
+    title: "See roles that fit",
+    detail: "Live jobs ranked by match %. Every listing shows why it fits you.",
+  },
+  {
+    step: 3,
+    title: "Ask the copilot",
+    detail: "Salary, career pivots, skill gaps — answered using your real profile.",
+  },
+  {
+    step: 4,
+    title: "Apply in one click",
+    detail: "Your agent tailors your résumé per role. You review and approve.",
+  },
+];
+
 /* ------------------------------------------------------------------ */
 /* Copy                                                                */
 /* ------------------------------------------------------------------ */

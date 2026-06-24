@@ -298,34 +298,36 @@ export const seekerFeatures: SeekerFeature[] = [
   {
     id: "f2",
     icon: "MessageCircle",
-    title: "A career agent that talks",
+    title: "Career copilot",
     description:
-      "Ask about salary, switching fields, or what to learn next. It answers with your context.",
+      "Ask about salary, switching fields, or skills to learn. Answers use your profile — not generic advice.",
     span: "md",
     accent: "violet",
   },
   {
     id: "f3",
     icon: "Sparkles",
-    title: "Explainable matches",
-    description: "Every role shows why it fits — no black-box scores.",
+    title: "Smart matches",
+    description:
+      "Roles ranked by how well they fit you. Every listing shows the score and the reason why.",
     span: "sm",
     accent: "cyan",
   },
   {
     id: "f4",
     icon: "FileEdit",
-    title: "Résumé tailored per role",
-    description: "The agent rewrites your résumé for each application automatically.",
+    title: "Résumé per role",
+    description:
+      "A different version for each job — rewritten to hit the keywords that role cares about.",
     span: "sm",
     accent: "amber",
   },
   {
     id: "f5",
     icon: "BellRing",
-    title: "Always-on job alerts",
+    title: "Job alerts",
     description:
-      "Your agent watches the market 24/7 and pings you the moment a strong role opens.",
+      "We watch the market 24/7 and ping you when a role matches your profile.",
     span: "md",
     accent: "lime",
   },

@@ -4,16 +4,21 @@ import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Newspaper, Rss } from "lucide-react";
+import { Guest3AgenciesList } from "@/components/guest-pages/guest-3-agencies-list";
 import { offerQuotes } from "@/components/guest-pages/guest-3-marquee";
-import { guest3HrPillars, type HrSignal } from "@/constants/guest-3";
+import {
+  guest3HrPillars,
+  type HrSignal,
+} from "@/constants/guest-3";
 import { cn } from "@/lib/utils";
 
-const SEEKER_QUOTES = offerQuotes.map((item) =>
-  item.kind === "quote" ? { quote: item.quote, author: item.author } : null,
-).filter((q): q is { quote: string; author: string } => q !== null);
+const SEEKER_QUOTES = offerQuotes
+  .map((item) => (item.kind === "quote" ? { quote: item.quote, author: item.author } : null))
+  .filter((q): q is { quote: string; author: string } => q !== null);
 
 const EASE = [0.22, 1, 0.36, 1] as const;
-const ROTATE_MS = 6500;
+const ROTATE_MS = 7000;
+const STAGGER_MS = 2300;
 
 const FALLBACK_SIGNALS: HrSignal[] = [
   {
@@ -74,24 +79,25 @@ const IMAGE_CELLS = [
     alt: "City skyline representing the job market",
   },
 ] as const;
+
 type BentoCellData =
   | { kind: "feed"; source: string; title: string; snippet?: string; category?: string }
   | { kind: "image"; label: string; caption: string; src: string; alt: string }
   | { kind: "quote"; quote: string; author: string }
   | { kind: "pillar"; eyebrow: string; text: string };
+
 type BentoLayout = {
   id: string;
   cells: { data: BentoCellData; className: string; accented: boolean }[];
 };
 
-function buildLayouts(signals: HrSignal[]): BentoLayout[] {
+function buildMarketLayouts(signals: HrSignal[]): BentoLayout[] {
   const feeds = signals.slice(0, 6);
   const q = SEEKER_QUOTES;
-  const pillars = guest3HrPillars;
 
   return [
     {
-      id: "market-lead",
+      id: "market-feed",
       cells: [
         {
           data: {
@@ -101,39 +107,12 @@ function buildLayouts(signals: HrSignal[]): BentoLayout[] {
             snippet: feeds[0]?.snippet,
             category: feeds[0]?.category,
           },
-          className: "col-span-2 min-h-[8.5rem]",
+          className: "col-span-2 min-h-0",
           accented: true,
         },
-        {
-          data: { kind: "image", ...IMAGE_CELLS[0] },
-          className: "col-span-1 min-h-[8rem]",
-          accented: false,
-        },
-        {
-          data: {
-            kind: "quote",
-            quote: q[2]?.quote ?? q[0].quote,
-            author: q[2]?.author ?? q[0].author,
-          },
-          className: "col-span-1 min-h-[8rem]",
-          accented: true,
-        },
-        {
-          data: {
-            kind: "pillar",
-            eyebrow: "For job seekers",
-            text: pillars[0],
-          },
-          className: "col-span-2 min-h-[6.5rem]",          accented: false,
-        },
-      ],
-    },
-    {
-      id: "salary-signals",
-      cells: [
         {
           data: { kind: "image", ...IMAGE_CELLS[1] },
-          className: "col-span-1 row-span-2 min-h-[12.5rem]",
+          className: "col-span-1 row-span-2 min-h-0",
           accented: true,
         },
         {
@@ -144,16 +123,27 @@ function buildLayouts(signals: HrSignal[]): BentoLayout[] {
             snippet: feeds[1]?.snippet,
             category: feeds[1]?.category,
           },
-          className: "col-span-1 min-h-[5.75rem]",
+          className: "col-span-1 min-h-0",
           accented: false,
         },
         {
-          data: {
-            kind: "quote",
-            quote: q[0]?.quote ?? "",
-            author: q[0]?.author ?? "",
-          },
-          className: "col-span-1 min-h-[5.75rem]",
+          data: { kind: "quote", quote: q[0]?.quote ?? "", author: q[0]?.author ?? "" },
+          className: "col-span-1 min-h-0",
+          accented: true,
+        },
+      ],
+    },
+    {
+      id: "market-pulse",
+      cells: [
+        {
+          data: { kind: "pillar", eyebrow: "Market pulse", text: guest3HrPillars[0] },
+          className: "col-span-2 min-h-0",
+          accented: false,
+        },
+        {
+          data: { kind: "image", ...IMAGE_CELLS[2] },
+          className: "col-span-1 min-h-0",
           accented: true,
         },
         {
@@ -163,86 +153,40 @@ function buildLayouts(signals: HrSignal[]): BentoLayout[] {
             title: feeds[2]?.title ?? FALLBACK_SIGNALS[2].title,
             category: feeds[2]?.category,
           },
-          className: "col-span-2 min-h-[6.25rem]",          accented: false,
-        },
-      ],
-    },
-    {
-      id: "seeker-pulse",
-      cells: [
-        {
-          data: {
-            kind: "pillar",
-            eyebrow: "Your HR universe",
-            text: pillars[1],
-          },
-          className: "col-span-2 min-h-[6rem]",
-          accented: true,
-        },
-        {
-          data: {
-            kind: "feed",
-            source: feeds[3]?.source ?? "Workable",
-            title: feeds[3]?.title ?? FALLBACK_SIGNALS[3].title,
-            snippet: feeds[3]?.snippet,
-            category: feeds[3]?.category,
-          },
-          className: "col-span-1 min-h-[7.5rem]",
+          className: "col-span-1 min-h-0",
           accented: false,
         },
         {
-          data: { kind: "image", ...IMAGE_CELLS[2] },
-          className: "col-span-1 min-h-[7.5rem]",
+          data: { kind: "quote", quote: q[1]?.quote ?? "", author: q[1]?.author ?? "" },
+          className: "col-span-2 min-h-0",
           accented: true,
-        },
-        {
-          data: {
-            kind: "quote",
-            quote: q[1]?.quote ?? "",
-            author: q[1]?.author ?? "",
-          },
-          className: "col-span-2 min-h-[6.5rem]",          accented: false,
         },
       ],
     },
   ];
 }
 
-function BentoCell({
-  data,
-  accented,
-}: {
-  data: BentoCellData;
-  accented: boolean;
-}) {
+function BentoCell({ data, accented }: { data: BentoCellData; accented: boolean }) {
   const shell = cn(
-    "flex h-full flex-col rounded-xl px-4 py-3.5 sm:px-4 sm:py-4",
-    data.kind === "image" && "overflow-hidden p-2.5 sm:p-3",
+    "flex h-full min-h-0 flex-col rounded-xl px-3.5 py-3 sm:px-4 sm:py-3.5",
+    data.kind === "image" && "overflow-hidden p-2 sm:p-2.5",
     accented && data.kind !== "image"
       ? "border border-accent-lime/35 bg-accent-lime/[0.12]"
-      : data.kind !== "image"
-        ? "border border-ink-900/[0.07] bg-white/92"
-        : "border border-ink-900/[0.07] bg-white/92",
+      : "border border-ink-900/[0.07] bg-white/92",
   );
+
   if (data.kind === "feed") {
     return (
       <div className={shell}>
-        <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-ink-500">
-          <Newspaper className="h-3 w-3 text-accent-lime-dark" />
-          {data.source}
-          {data.category ? (
-            <span className="rounded bg-ink-950/6 px-1.5 py-0.5 text-[9px] font-medium normal-case tracking-normal text-ink-600">
-              {data.category}
-            </span>
-          ) : null}
+        <span className="inline-flex items-center gap-1.5 text-[9.5px] font-semibold uppercase tracking-[0.12em] text-ink-500">
+          <Newspaper className="h-3 w-3 shrink-0 text-accent-lime-dark" />
+          <span className="truncate">{data.source}</span>
         </span>
-        <p className="mt-2 line-clamp-3 text-[13px] font-semibold leading-snug text-ink-900 sm:text-[14px]">
+        <p className="mt-1.5 line-clamp-3 flex-1 text-[12.5px] font-semibold leading-snug text-ink-900 sm:text-[13px]">
           {data.title}
         </p>
         {data.snippet ? (
-          <p className="mt-1.5 line-clamp-2 text-[11.5px] leading-relaxed text-ink-600 sm:text-[12px]">
-            {data.snippet}
-          </p>
+          <p className="mt-1 line-clamp-2 text-[11px] leading-relaxed text-ink-600">{data.snippet}</p>
         ) : null}
       </div>
     );
@@ -251,56 +195,163 @@ function BentoCell({
   if (data.kind === "image") {
     return (
       <div className={shell}>
-        <div className="relative min-h-[4.5rem] flex-1 overflow-hidden rounded-lg">
+        <div className="relative min-h-[4.25rem] flex-1 overflow-hidden rounded-lg">
           <Image
             src={data.src}
             alt={data.alt}
             fill
-            sizes="(min-width: 1280px) 200px, 28vw"
+            sizes="(min-width: 1280px) 180px, 28vw"
             className="object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-ink-950/65 via-ink-950/10 to-transparent" />
-          <p className="absolute bottom-2.5 left-2.5 right-2.5 text-[12px] font-semibold leading-snug text-paper-50 sm:text-[13px]">
+          <div className="absolute inset-0 bg-gradient-to-t from-ink-950/70 via-ink-950/15 to-transparent" />
+          <p className="absolute bottom-2 left-2 right-2 text-[11px] font-semibold leading-snug text-paper-50 sm:text-[11.5px]">
             {data.caption}
           </p>
         </div>
       </div>
     );
   }
+
   if (data.kind === "quote") {
     return (
       <div className={cn(shell, "justify-center")}>
-        <p className="line-clamp-3 text-[12.5px] font-medium leading-snug text-ink-800 sm:text-[13px]">
-          <span className="font-serif text-[16px] leading-none text-accent-lime-dark">“</span>
+        <p className="line-clamp-4 text-[11.5px] font-medium leading-snug text-ink-800 sm:text-[12px]">
+          <span className="font-serif text-[15px] leading-none text-accent-lime-dark">“</span>
           {data.quote}
         </p>
-        <p className="mt-2 text-[11px] font-semibold text-ink-500">{data.author}</p>
+        <p className="mt-1.5 text-[10px] font-semibold text-ink-500">{data.author}</p>
       </div>
     );
   }
 
   return (
     <div className={cn(shell, "justify-center")}>
-      <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-accent-lime-dark">
-        <Rss className="h-3 w-3" />
+      <span className="inline-flex items-center gap-1.5 text-[9.5px] font-semibold uppercase tracking-[0.12em] text-accent-lime-dark">
+        <Rss className="h-3 w-3 shrink-0" />
         {data.eyebrow}
       </span>
-      <p className="mt-2 text-[12.5px] font-semibold leading-snug text-ink-800 sm:text-[13px]">
+      <p className="mt-1.5 line-clamp-3 text-[11.5px] font-semibold leading-snug text-ink-800 sm:text-[12px]">
         {data.text}
       </p>
     </div>
   );
 }
 
-type Guest3SignalBentoProps = {
+function BentoGrid({ layout }: { layout: BentoLayout }) {
+  return (
+    <div className="grid h-full min-h-0 grid-cols-2 auto-rows-fr gap-2">
+      {layout.cells.map((cell, i) => (
+        <div key={`${layout.id}-${i}`} className={cn("min-h-0", cell.className)}>
+          <BentoCell data={cell.data} accented={cell.accented} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function SideBentoSection({
+  label,
+  layouts,
+  live = false,
+  staggerIndex = 0,
+  staticGrid = false,
+  flexWeight = "1",
+}: {
+  label: string;
+  layouts: BentoLayout[];
+  live?: boolean;
+  staggerIndex?: number;
+  staticGrid?: boolean;
+  flexWeight?: "0.9" | "1" | "1.1" | "1.15";
+}) {
+  const [slide, setSlide] = useState(0);
+
+  useEffect(() => {
+    if (staticGrid || layouts.length <= 1) return;
+
+    let intervalId = 0;
+    const startDelay = staggerIndex * STAGGER_MS;
+
+    const startTimer = window.setTimeout(() => {
+      intervalId = window.setInterval(() => {
+        setSlide((i) => (i + 1) % layouts.length);
+      }, ROTATE_MS);
+    }, startDelay);
+
+    return () => {
+      window.clearTimeout(startTimer);
+      window.clearInterval(intervalId);
+    };
+  }, [layouts.length, staggerIndex, staticGrid]);
+
+  const current = layouts[slide] ?? layouts[0];
+  const flexClass =
+    flexWeight === "1.15"
+      ? "flex-[1.15]"
+      : flexWeight === "1.1"
+        ? "flex-[1.1]"
+        : flexWeight === "0.9"
+          ? "flex-[0.92]"
+          : "flex-1";
+
+  return (
+    <section className={cn("flex min-h-0 flex-col", flexClass)}>
+      <div className="mb-2 flex shrink-0 items-center justify-between gap-2 border-b border-ink-900/8 pb-2">
+        <div className="flex min-w-0 items-center gap-2">
+          <span className="relative flex h-2 w-2 shrink-0">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent-lime opacity-40" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-accent-lime" />
+          </span>
+          <span className="truncate text-[10px] font-semibold uppercase tracking-[0.14em] text-ink-700">
+            {label}
+            {live ? " · live" : ""}
+          </span>
+        </div>
+        {!staticGrid && layouts.length > 1 ? (
+          <div className="flex shrink-0 gap-1">
+            {layouts.map((layout, i) => (
+              <span
+                key={layout.id}
+                className={cn(
+                  "h-1 rounded-full transition-all duration-300",
+                  i === slide ? "w-3 bg-accent-lime-dark" : "w-1 bg-ink-900/15",
+                )}
+              />
+            ))}
+          </div>
+        ) : null}
+      </div>
+
+      <div className="relative min-h-0 flex-1">
+        {staticGrid ? (
+          <BentoGrid layout={current} />
+        ) : (
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={current.id}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.38, ease: EASE }}
+              className="absolute inset-0"
+            >
+              <BentoGrid layout={current} />
+            </motion.div>
+          </AnimatePresence>
+        )}
+      </div>
+    </section>
+  );
+}
+
+type Guest3RightRailProps = {
   className?: string;
 };
 
-/** Right-edge bento — live HR RSS mixed with seeker quotes, pillars & image placeholders. */
-export function Guest3SignalBento({ className }: Guest3SignalBentoProps) {
+/** Right-edge stack — agencies, how-to, then job market bento sections. */
+export function Guest3RightRail({ className }: Guest3RightRailProps) {
   const [signals, setSignals] = useState<HrSignal[]>(FALLBACK_SIGNALS);
   const [live, setLive] = useState(false);
-  const [slide, setSlide] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -321,66 +372,37 @@ export function Guest3SignalBento({ className }: Guest3SignalBentoProps) {
     };
   }, []);
 
-  const layouts = useMemo(() => buildLayouts(signals), [signals]);
-
-  useEffect(() => {
-    if (layouts.length <= 1) return;
-    const id = window.setInterval(() => {
-      setSlide((i) => (i + 1) % layouts.length);
-    }, ROTATE_MS);
-    return () => window.clearInterval(id);
-  }, [layouts.length]);
-
-  const current = layouts[slide] ?? layouts[0];
+  const marketLayouts = useMemo(() => buildMarketLayouts(signals), [signals]);
 
   return (
     <div
       className={cn(
-        "flex h-full w-[min(22rem,34vw)] max-w-[400px] flex-col justify-center",
-        "[mask-image:linear-gradient(to_bottom,transparent,black_12%,black_88%,transparent)]",
+        "flex w-[min(19rem,31vw)] max-w-[372px] flex-col gap-5 py-1",
         className,
       )}
       aria-hidden
     >
-      <div className="mb-3 flex items-center gap-2 px-1">
-        <span className="relative flex h-2 w-2">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent-lime opacity-40" />
-          <span className="relative inline-flex h-2 w-2 rounded-full bg-accent-lime" />
-        </span>
-        <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-ink-500">
-          Job market{live ? " · live" : ""}
-        </span>
-      </div>
+      <Guest3AgenciesList className="shrink-0" />
 
-      <div className="relative min-h-[28rem]">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={current.id}
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.45, ease: EASE }}
-            className="grid grid-cols-2 gap-3"
-          >            {current.cells.map((cell, i) => (
-              <div key={`${current.id}-${i}`} className={cell.className}>
-                <BentoCell data={cell.data} accented={cell.accented} />
-              </div>
-            ))}
-          </motion.div>
-        </AnimatePresence>
-      </div>
-
-      <div className="mt-3 flex justify-center gap-1.5">
-        {layouts.map((layout, i) => (
-          <span
-            key={layout.id}
-            className={cn(
-              "h-1 rounded-full transition-all duration-300",
-              i === slide ? "w-4 bg-accent-lime-dark" : "w-1 bg-ink-900/15",
-            )}
-          />
-        ))}
+      <div
+        className={cn(
+          "flex min-h-0 flex-1 flex-col",
+          "[mask-image:linear-gradient(to_bottom,black_0%,black_90%,transparent)]",
+        )}
+      >
+        <SideBentoSection
+          label="Job market"
+          layouts={marketLayouts}
+          live={live}
+          staggerIndex={0}
+          flexWeight="1"
+        />
       </div>
     </div>
   );
+}
+
+/** @deprecated Use Guest3RightRail — kept for imports that expect the old name. */
+export function Guest3SignalBento({ className }: Guest3RightRailProps) {
+  return <Guest3RightRail className={className} />;
 }
